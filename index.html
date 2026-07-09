@@ -1,689 +1,150 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FXG Team Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!-- Firebase (compat SDK, no build step needed) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<style>
-  :root{
-    --bg:#0b0d10;
-    --panel:#14171c;
-    --panel-2:#1b1f26;
-    --line:#262b33;
-    --gold:#c9a24b;
-    --gold-soft:#8f7638;
-    --text:#ece7dd;
-    --muted:#8a8f98;
-    --green:#3fb68b;
-    --red:#d6544b;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;}
-  a{color:inherit;}
-  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-  button{font-family:inherit;cursor:pointer;border:none;}
-  input,select{font-family:inherit;}
-
-  /* Ticker */
-  .ticker-wrap{
-    background:linear-gradient(180deg,#0e1013,#0b0d10);
-    border-bottom:1px solid var(--line);
-    overflow:hidden;white-space:nowrap;height:38px;display:flex;align-items:center;
-  }
-  .ticker{display:inline-block;padding-left:100%;animation:scroll 30s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.5px;color:var(--gold);}
-  .ticker span.sep{color:var(--line);margin:0 18px;}
-  @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
-
-  header.top{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:22px 32px;border-bottom:1px solid var(--line);
-  }
-  .brand{display:flex;align-items:center;gap:12px;}
-  .brand .mark{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;color:var(--gold);font-size:15px;}
-  .brand h1{font-size:20px;letter-spacing:.5px;}
-  .brand .sub{font-size:10.5px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px;font-family:'IBM Plex Mono',monospace;}
-
-  .navbtns{display:flex;gap:10px;align-items:center;}
-  .btn{padding:10px 18px;border-radius:3px;font-size:13.5px;font-weight:500;transition:.15s;}
-  .btn-gold{background:var(--gold);color:#181205;}
-  .btn-gold:hover{background:#dcb35e;}
-  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text);}
-  .btn-ghost:hover{border-color:var(--gold-soft);}
-  .btn-danger{background:transparent;border:1px solid var(--red);color:var(--red);}
-  .btn-sm{padding:7px 12px;font-size:12px;}
-
-  main{max-width:1080px;margin:0 auto;padding:44px 32px 80px;}
-
-  .center-wrap{max-width:420px;margin:60px auto;}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:32px;}
-  .card h2{font-size:24px;margin-bottom:6px;}
-  .card .desc{color:var(--muted);font-size:13.5px;margin-bottom:26px;}
-  .field{margin-bottom:16px;}
-  .field label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;}
-  .field input, .field select{
-    width:100%;padding:11px 13px;background:var(--panel-2);border:1px solid var(--line);border-radius:3px;color:var(--text);font-size:14px;
-  }
-  .field input:focus, .field select:focus{outline:none;border-color:var(--gold-soft);}
-  .field-row{display:flex;gap:12px;}
-  .field-row .field{flex:1;}
-  .err{color:var(--red);font-size:13px;margin:10px 0;min-height:14px;}
-  .msg-ok{color:var(--green);font-size:13px;margin:10px 0;}
-  .link-btn{background:none;color:var(--gold);font-size:13px;text-decoration:underline;padding:0;}
-  .full{width:100%;}
-
-  .photo-pick{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
-  .photo-pick .preview{width:56px;height:56px;border-radius:50%;background:var(--panel-2);border:1px solid var(--line);object-fit:cover;}
-  .photo-pick label.upload{padding:9px 14px;border:1px dashed var(--gold-soft);border-radius:3px;font-size:12.5px;color:var(--gold);cursor:pointer;}
-  .photo-pick input[type=file]{display:none;}
-
-  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:32px;}
-  .tab{padding:12px 4px;margin-right:26px;color:var(--muted);font-size:13.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;border-bottom:2px solid transparent;}
-  .tab.active{color:var(--gold);border-color:var(--gold);}
-
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
-  .member-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:20px;position:relative;}
-  .member-card .row1{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
-  .member-card img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:1px solid var(--line);}
-  .avatar-fallback{width:52px;height:52px;border-radius:50%;background:var(--panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;color:var(--gold);font-size:18px;}
-  .member-card .name{font-family:'Fraunces',serif;font-size:16.5px;}
-  .member-card .role{font-size:10.5px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;margin-top:2px;}
-  .stat-line{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:6px 0;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;}
-  .stat-line b{color:var(--text);font-weight:500;}
-  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-family:'IBM Plex Mono',monospace;}
-  .badge.profit{background:rgba(63,182,139,.12);color:var(--green);border:1px solid rgba(63,182,139,.3);}
-  .badge.loss{background:rgba(214,84,75,.12);color:var(--red);border:1px solid rgba(214,84,75,.3);}
-
-  .pending-box{text-align:center;padding:70px 20px;}
-  .pending-box .icon{font-size:34px;margin-bottom:18px;color:var(--gold);}
-
-  .req-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;gap:16px;align-items:center;margin-bottom:12px;}
-  .req-card .info{flex:1;}
-  .req-card .info .n{font-family:'Fraunces',serif;font-size:16px;}
-  .req-card .info .d{font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:3px;}
-  .req-actions{display:flex;gap:8px;}
-
-  .empty{text-align:center;padding:50px 0;color:var(--muted);font-size:13.5px;}
-  footer{text-align:center;padding:30px;color:var(--muted);font-size:11.5px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;}
-  .toggle-row{display:flex;gap:10px;}
-  .toggle-btn{flex:1;padding:10px;border:1px solid var(--line);border-radius:3px;background:var(--panel-2);color:var(--muted);font-size:13px;}
-  .toggle-btn.on-yes.selected{background:rgba(63,182,139,.12);border-color:var(--green);color:var(--green);}
-  .toggle-btn.on-no.selected{background:rgba(214,84,75,.12);border-color:var(--red);color:var(--red);}
-  .loading{color:var(--muted);text-align:center;padding:60px 0;font-family:'IBM Plex Mono',monospace;font-size:13px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FXG PRO PORTAL</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        body { background: #0e1015; color: #d1d4dc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: #131722; padding: 30px; border-radius: 12px; width: 100%; max-width: 600px; border: 1px solid #2a2e39; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { color: #ffffff; letter-spacing: 2px; }
+        .input-group { margin-bottom: 15px; }
+        label { font-size: 12px; color: #8c93a1; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        input, select { width: 100%; padding: 12px; background: #1e222d; border: 1px solid #2a2e39; color: white; border-radius: 6px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .btn-green { background: #26a69a; color: white; }
+        .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .section { display: none; }
+        .admin-card { background: #1e222d; padding: 15px; margin-top: 10px; border-radius: 6px; border: 1px solid #2a2e39; display: flex; justify-content: space-between; align-items: center; }
+        .member-card { background: #1e222d; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #2a2e39; }
+    </style>
 </head>
 <body>
 
-<div class="ticker-wrap"><div class="ticker" id="ticker">FXG PORTAL <span class="sep">•</span> LOADING TEAM DATA <span class="sep">•</span></div></div>
-
-<header class="top">
-  <div class="brand">
-    <div class="mark">FX</div>
-    <div>
-      <h1>FXG Team</h1>
-      <div class="sub">Member Portal</div>
+    <div class="container section" id="login-section" style="display: block;">
+        <div class="header"><h2>FXG PORTAL</h2><p>Login to Access</p></div>
+        <div class="input-group"><label>Username</label><input type="text" id="log-u"></div>
+        <div class="input-group"><label>Password</label><input type="password" id="log-p"></div>
+        <button class="btn btn-green" onclick="handleLogin()">Login</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register New Account</button>
+        <button type="button" class="btn-google" id="google-login-btn">Sign in with Google</button>
     </div>
-  </div>
-  <div class="navbtns" id="navbtns"></div>
-</header>
 
-<main id="app">
-  <div class="loading">Loading…</div>
-</main>
-
-<footer>FXG TEAM PORTAL — INTERNAL USE ONLY</footer>
-
-<script>
-/* ---------------- Firebase config ---------------- */
-const firebaseConfig = {
-  apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5Lvv7gzFI",
-  authDomain: "fxg-portal.firebaseapp.com",
-  projectId: "fxg-portal",
-  storageBucket: "fxg-portal.firebasestorage.app",
-  messagingSenderId: "702222367751",
-  appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2",
-  measurementId: "G-1RWMGLZ5PY"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-const OWNER_USERNAME = "fxg.saurav"; // reserved owner login
-const EMAIL_SUFFIX = "@fxgteam.local";
-
-function usernameToEmail(u){
-  const clean = u.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'');
-  return clean + EMAIL_SUFFIX;
-}
-
-/* ---------------- state ---------------- */
-let currentUser = null;   // firebase auth user
-let currentDoc = null;    // 'member' | 'request' | null
-let currentData = null;   // the firestore data
-let dashboardTab = 'directory';
-
-const app = document.getElementById('app');
-const navbtns = document.getElementById('navbtns');
-
-/* ---------------- image compression helper ---------------- */
-function fileToCompressedBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const maxDim = 300;
-        let w = img.width, h = img.height;
-        if(w > h && w > maxDim){ h = h*(maxDim/w); w = maxDim; }
-        else if(h > maxDim){ w = w*(maxDim/h); h = maxDim; }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg', 0.6));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ---------------- render helpers ---------------- */
-function initials(name){
-  return (name||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
-}
-
-function renderNav(){
-  if(!currentUser){
-    navbtns.innerHTML = `<button class="btn btn-ghost" onclick="setView('login')">Login</button>
-      <button class="btn btn-gold" onclick="setView('join')">Join FXG Team</button>`;
-  } else {
-    navbtns.innerHTML = `<span class="mono" style="color:var(--muted);font-size:12.5px;margin-right:6px;">${currentData ? '@'+currentData.username : ''}</span>
-      <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>`;
-  }
-}
-
-let viewOverride = null;
-function setView(v){ viewOverride = v; render(); }
-
-/* ---------------- ticker ---------------- */
-async function loadTicker(){
-  try{
-    const snap = await db.collection('members').orderBy('createdAt','desc').limit(20).get();
-    if(snap.empty){
-      document.getElementById('ticker').innerHTML = 'FXG PORTAL <span class="sep">•</span> WELCOME <span class="sep">•</span>';
-      return;
-    }
-    let parts = [];
-    snap.forEach(doc=>{
-      const m = doc.data();
-      parts.push(`${(m.fullName||m.username||'').toUpperCase()} · ${(m.role||'MEMBER').toUpperCase()} · ${m.years||0}Y`);
-    });
-    document.getElementById('ticker').innerHTML = parts.join(' <span class="sep">•</span> ') + ' <span class="sep">•</span> ';
-  }catch(e){
-    document.getElementById('ticker').innerHTML = 'FXG PORTAL <span class="sep">•</span>';
-  }
-}
-
-/* ---------------- auth state ---------------- */
-auth.onAuthStateChanged(async (user)=>{
-  currentUser = user;
-  currentDoc = null;
-  currentData = null;
-  if(user){
-    const mSnap = await db.collection('members').doc(user.uid).get();
-    if(mSnap.exists){
-      currentDoc = 'member';
-      currentData = mSnap.data();
-    } else {
-      const rSnap = await db.collection('requests').doc(user.uid).get();
-      if(rSnap.exists){
-        currentDoc = 'request';
-        currentData = rSnap.data();
-      }
-    }
-    viewOverride = null;
-  }
-  renderNav();
-  render();
-});
-
-function logout(){
-  auth.signOut();
-  viewOverride = 'login';
-}
-
-/* ---------------- main render router ---------------- */
-function render(){
-  if(currentUser){
-    if(currentDoc === 'member') return renderDashboard();
-    if(currentDoc === 'request') return renderPending();
-    app.innerHTML = `<div class="loading">Setting up your account…</div>`;
-    return;
-  }
-  const v = viewOverride || 'directory';
-  if(v === 'login') return renderLogin();
-  if(v === 'join') return renderJoin();
-  return renderPublicDirectory();
-}
-
-/* ---------------- public directory (logged out) ---------------- */
-async function renderPublicDirectory(){
-  app.innerHTML = `<div class="loading">Loading team directory…</div>`;
-  const snap = await db.collection('members').orderBy('createdAt','desc').get();
-  let cards = '';
-  snap.forEach(doc=> cards += memberCard(doc.data()));
-  app.innerHTML = `
-    <h2 style="font-size:28px;margin-bottom:6px;">Team Directory</h2>
-    <p style="color:var(--muted);font-size:13.5px;margin-bottom:30px;">Public profiles of the FXG trading team.</p>
-    ${snap.empty ? `<div class="empty">No members yet. Be the first to join.</div>` : `<div class="grid">${cards}</div>`}
-  `;
-  loadTicker();
-}
-
-function memberCard(m){
-  const photo = m.photoBase64
-    ? `<img src="${m.photoBase64}" />`
-    : `<div class="avatar-fallback">${initials(m.fullName)}</div>`;
-  const profBadge = m.profitable === true
-    ? `<span class="badge profit">Profitable</span>`
-    : m.profitable === false
-      ? `<span class="badge loss">Not Profitable</span>`
-      : `<span class="badge" style="color:var(--muted);border:1px solid var(--line);">Unrated</span>`;
-  return `
-    <div class="member-card">
-      <div class="row1">
-        ${photo}
-        <div>
-          <div class="name">${escapeHtml(m.fullName||m.username||'')}</div>
-          <div class="role">${escapeHtml(m.role||'Member')}</div>
-        </div>
-      </div>
-      <div class="stat-line"><span>Age</span><b>${m.age||'—'}</b></div>
-      <div class="stat-line"><span>Trading since</span><b>${m.years||0} yrs</b></div>
-      <div class="stat-line"><span>Instagram</span><b>@${escapeHtml(m.instagram||'—')}</b></div>
-      <div class="stat-line" style="border-bottom:none;"><span>Status</span>${profBadge}</div>
+    <div class="container section" id="reg-section">
+        <div class="header"><h2>REGISTER</h2></div>
+        <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
+        <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
+        <button class="btn btn-green" onclick="handleRegister()">Register & Save</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
     </div>
-  `;
-}
 
-function escapeHtml(s){
-  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* ---------------- login ---------------- */
-function renderLogin(){
-  app.innerHTML = `
-    <div class="center-wrap">
-      <div class="card">
-        <h2>Member Login</h2>
-        <div class="desc">Enter your FXG username and password.</div>
-        <div class="field">
-          <label>Username</label>
-          <input id="li-user" type="text" placeholder="e.g. fxg.rahul" />
+    <div class="container section" id="form-section">
+        <div class="header"><h2>JOIN FXG TEAM</h2></div>
+        <div class="input-group"><label>Full Name</label><input type="text" id="app-name"></div>
+        <div class="input-group"><label>Age</label><input type="number" id="app-age"></div>
+        <div class="input-group"><label>Exp (Years)</label><input type="number" id="app-exp"></div>
+        <div class="input-group"><label>Instagram</label><input type="text" id="app-insta"></div>
+        <div class="input-group">
+            <label>Role</label>
+            <select id="app-role">
+                <option value="Lead Analyst">Lead Analyst (XAUUSD)</option>
+                <option value="SMC Specialist">SMC Specialist</option>
+                <option value="Independent Trader">Independent Trader</option>
+            </select>
         </div>
-        <div class="field">
-          <label>Password</label>
-          <input id="li-pass" type="password" placeholder="••••••••" />
-        </div>
-        <div class="err" id="li-err"></div>
-        <button class="btn btn-gold full" onclick="doLogin()">Login</button>
-        <div style="text-align:center;margin-top:18px;">
-          <button class="link-btn" onclick="setView('join')">Not a member? Join FXG Team</button>
-        </div>
-      </div>
+        <div class="input-group"><label>Profile Photo</label><input type="file" id="app-photo" accept="image/*"></div>
+        <button class="btn btn-green" onclick="submitApplication()">Submit Application</button>
+        <button class="btn" onclick="show('members-dash')">Back to Members</button>
     </div>
-  `;
-}
 
-async function doLogin(){
-  const u = document.getElementById('li-user').value;
-  const p = document.getElementById('li-pass').value;
-  const errEl = document.getElementById('li-err');
-  errEl.textContent = '';
-  if(!u || !p){ errEl.textContent = 'Username aur password dono bharo.'; return; }
-  try{
-    await auth.signInWithEmailAndPassword(usernameToEmail(u), p);
-  }catch(e){
-    errEl.textContent = 'Galat username ya password.';
-  }
-}
-
-/* ---------------- join form ---------------- */
-let joinPhotoBase64 = null;
-
-function renderJoin(){
-  app.innerHTML = `
-    <div class="center-wrap" style="max-width:480px;">
-      <div class="card">
-        <h2>Join FXG Team</h2>
-        <div class="desc">Apply karo. Owner approve karega tabhi profile live hogi.</div>
-
-        <div class="photo-pick">
-          <img class="preview" id="join-preview" src="" style="display:none;" />
-          <div class="avatar-fallback" id="join-fallback">?</div>
-          <label class="upload">Upload Photo
-            <input type="file" id="join-photo" accept="image/*" onchange="handleJoinPhoto(event)" />
-          </label>
-        </div>
-
-        <div class="field">
-          <label>Username (login ke liye)</label>
-          <input id="j-username" type="text" placeholder="e.g. fxg.rahul" />
-        </div>
-        <div class="field">
-          <label>Password</label>
-          <input id="j-password" type="password" placeholder="Kam se kam 6 characters" />
-        </div>
-        <div class="field">
-          <label>Full Name</label>
-          <input id="j-fullname" type="text" placeholder="Poora naam" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Age</label>
-            <input id="j-age" type="number" placeholder="21" />
-          </div>
-          <div class="field">
-            <label>Years Trading</label>
-            <input id="j-years" type="number" placeholder="3" />
-          </div>
-        </div>
-        <div class="field">
-          <label>Instagram Username</label>
-          <input id="j-insta" type="text" placeholder="without @" />
-        </div>
-        <div class="field">
-          <label>Desired Role in FXG Team</label>
-          <select id="j-role">
-            <option value="Member">Member</option>
-            <option value="Team Leader">Team Leader</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </div>
-        <div class="err" id="j-err"></div>
-        <div class="msg-ok" id="j-ok"></div>
-        <button class="btn btn-gold full" onclick="doJoin()">Submit Application</button>
-        <div style="text-align:center;margin-top:18px;">
-          <button class="link-btn" onclick="setView('login')">Already a member? Login</button>
-        </div>
-      </div>
+    <div class="container section" id="members-dash" style="max-width: 800px;">
+        <div class="header"><h2>FXG TEAM MEMBERS</h2></div>
+        <button class="btn btn-green" onclick="show('form-section')">+ JOIN FXG TEAM</button>
+        <div id="approved-list"></div>
+        <button class="btn" style="margin-top:20px;" onclick="show('login-section')">Logout</button>
     </div>
-  `;
-  joinPhotoBase64 = null;
-}
 
-async function handleJoinPhoto(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  joinPhotoBase64 = await fileToCompressedBase64(file);
-  const img = document.getElementById('join-preview');
-  img.src = joinPhotoBase64;
-  img.style.display = 'block';
-  document.getElementById('join-fallback').style.display = 'none';
-}
-
-async function doJoin(){
-  const errEl = document.getElementById('j-err');
-  const okEl = document.getElementById('j-ok');
-  errEl.textContent = ''; okEl.textContent = '';
-
-  const username = document.getElementById('j-username').value.trim();
-  const password = document.getElementById('j-password').value;
-  const fullName = document.getElementById('j-fullname').value.trim();
-  const age = parseInt(document.getElementById('j-age').value) || null;
-  const years = parseInt(document.getElementById('j-years').value) || 0;
-  const instagram = document.getElementById('j-insta').value.trim().replace(/^@/,'');
-  const role = document.getElementById('j-role').value;
-
-  if(!username || !password || !fullName){
-    errEl.textContent = 'Username, password aur naam zaroori hai.';
-    return;
-  }
-  if(password.length < 6){
-    errEl.textContent = 'Password kam se kam 6 characters ka rakho.';
-    return;
-  }
-
-  const isOwner = username.toLowerCase() === OWNER_USERNAME;
-
-  try{
-    const cred = await auth.createUserWithEmailAndPassword(usernameToEmail(username), password);
-    const uid = cred.user.uid;
-    const baseData = {
-      uid, username, fullName, age, years, instagram,
-      role: isOwner ? 'Owner' : role,
-      photoBase64: joinPhotoBase64 || null,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if(isOwner){
-      await db.collection('members').doc(uid).set({...baseData, profitable: null, approved: true});
-      okEl.textContent = 'Owner account ready! Redirecting…';
-    } else {
-      await db.collection('requests').doc(uid).set({...baseData, status: 'pending'});
-      okEl.textContent = 'Application submitted! Owner approval ka wait karo.';
-    }
-  }catch(e){
-    if(e.code === 'auth/email-already-in-use'){
-      errEl.textContent = 'Ye username pehle se liya gaya hai.';
-    } else {
-      errEl.textContent = 'Kuch galat hua: ' + e.message;
-    }
-  }
-}
-
-/* ---------------- pending screen ---------------- */
-function renderPending(){
-  app.innerHTML = `
-    <div class="pending-box">
-      <div class="icon">⏳</div>
-      <h2>Application Under Review</h2>
-      <p style="color:var(--muted);max-width:420px;margin:14px auto 0;font-size:13.5px;">
-        Tumhari application FXG owner ke paas gayi hai. Approve hote hi tumhari profile team directory mein live ho jayegi aur tum dashboard access kar paoge.
-      </p>
+    <div class="container section" id="owner-dash" style="max-width: 800px;">
+        <div class="header"><h2>OWNER DASHBOARD</h2></div>
+        <h3>Pending Applications</h3>
+        <div id="pending-list"></div>
+        <button class="btn" onclick="show('login-section')">Logout</button>
     </div>
-  `;
-}
 
-/* ---------------- member dashboard ---------------- */
-async function renderDashboard(){
-  const isOwner = currentData.role === 'Owner';
-  app.innerHTML = `
-    <div class="tabs" id="tabs"></div>
-    <div id="tab-content"><div class="loading">Loading…</div></div>
-  `;
-  renderTabs(isOwner);
-  loadTab(dashboardTab, isOwner);
-}
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        const firebaseConfig = { apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI", authDomain: "fxg-portal.firebaseapp.com", projectId: "fxg-portal", storageBucket: "fxg-portal.firebasestorage.app", messagingSenderId: "702222367751", appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).then(() => show('members-dash')).catch(console.error);
+        });
+    </script>
 
-function renderTabs(isOwner){
-  const tabsEl = document.getElementById('tabs');
-  let tabs = [
-    {id:'directory', label:'Team Directory'},
-    {id:'profile', label:'My Profile'}
-  ];
-  if(isOwner) tabs.push({id:'owner', label:'Owner Panel'});
-  tabsEl.innerHTML = tabs.map(t=>
-    `<div class="tab ${dashboardTab===t.id?'active':''}" onclick="switchTab('${t.id}', ${isOwner})">${t.label}</div>`
-  ).join('');
-}
+    <script>
+        function show(id) {
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
 
-function switchTab(id, isOwner){
-  dashboardTab = id;
-  renderTabs(isOwner);
-  loadTab(id, isOwner);
-}
+        function handleRegister() {
+            localStorage.setItem('user_' + document.getElementById('new-u').value, document.getElementById('new-p').value);
+            alert("Account created!"); show('login-section');
+        }
 
-async function loadTab(id, isOwner){
-  const el = document.getElementById('tab-content');
-  el.innerHTML = `<div class="loading">Loading…</div>`;
-  if(id === 'directory'){
-    const snap = await db.collection('members').orderBy('createdAt','desc').get();
-    let cards = '';
-    snap.forEach(doc=> cards += memberCard(doc.data()));
-    el.innerHTML = snap.empty ? `<div class="empty">Abhi koi member nahi.</div>` : `<div class="grid">${cards}</div>`;
-    loadTicker();
-  } else if(id === 'profile'){
-    renderProfileEditor(el);
-  } else if(id === 'owner'){
-    renderOwnerPanel(el);
-  }
-}
+        function handleLogin() {
+            const u = document.getElementById('log-u').value;
+            const p = document.getElementById('log-p').value;
+            if(u === 'fxg.saurav' && p === 'Xauusd@123') { show('owner-dash'); renderPending(); }
+            else if(localStorage.getItem('user_' + u) === p) { show('members-dash'); renderApproved(); }
+            else alert("Invalid Credentials!");
+        }
 
-/* ---------------- profile editor ---------------- */
-function renderProfileEditor(el){
-  const m = currentData;
-  el.innerHTML = `
-    <div class="card" style="max-width:460px;">
-      <h2 style="font-size:20px;margin-bottom:22px;">My Profile</h2>
+        function submitApplication() {
+            const data = {
+                name: document.getElementById('app-name').value,
+                role: document.getElementById('app-role').value,
+                exp: document.getElementById('app-exp').value,
+                insta: document.getElementById('app-insta').value,
+                status: 'pending'
+            };
+            localStorage.setItem('app_' + data.name, JSON.stringify(data));
+            alert("Sent to Owner!"); show('members-dash');
+        }
 
-      <div class="photo-pick">
-        ${m.photoBase64 ? `<img class="preview" id="pf-preview" src="${m.photoBase64}" />` : `<div class="avatar-fallback" id="pf-fallback">${initials(m.fullName)}</div>`}
-        <label class="upload">Change Photo
-          <input type="file" id="pf-photo" accept="image/*" onchange="handleProfilePhoto(event)" />
-        </label>
-      </div>
+        function renderPending() {
+            const list = document.getElementById('pending-list'); list.innerHTML = "";
+            for(let i=0; i<localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if(key.startsWith('app_')) {
+                    let d = JSON.parse(localStorage.getItem(key));
+                    list.innerHTML += `<div class="admin-card">${d.name} (${d.role}) <button onclick="approve('${key}')">Approve</button></div>`;
+                }
+            }
+        }
 
-      <div class="field">
-        <label>Full Name</label>
-        <input id="pf-fullname" type="text" value="${escapeHtml(m.fullName||'')}" />
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Age</label>
-          <input id="pf-age" type="number" value="${m.age||''}" />
-        </div>
-        <div class="field">
-          <label>Years Trading</label>
-          <input id="pf-years" type="number" value="${m.years||0}" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Instagram Username</label>
-        <input id="pf-insta" type="text" value="${escapeHtml(m.instagram||'')}" />
-      </div>
-      <div class="field">
-        <label>Trading Status</label>
-        <div class="toggle-row">
-          <button type="button" class="toggle-btn on-yes ${m.profitable===true?'selected':''}" onclick="setProfitable(true)">Profitable</button>
-          <button type="button" class="toggle-btn on-no ${m.profitable===false?'selected':''}" onclick="setProfitable(false)">Not Profitable</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>Role</label>
-        <input type="text" value="${escapeHtml(m.role||'')}" disabled style="opacity:.6;" />
-      </div>
-      <div class="err" id="pf-err"></div>
-      <div class="msg-ok" id="pf-ok"></div>
-      <button class="btn btn-gold full" onclick="saveProfile()">Save Changes</button>
-    </div>
-  `;
-  window._pfProfitable = m.profitable;
-  window._pfPhoto = m.photoBase64 || null;
-}
+        function approve(key) {
+            let d = JSON.parse(localStorage.getItem(key));
+            d.status = 'approved';
+            localStorage.setItem('member_' + d.name, JSON.stringify(d));
+            localStorage.removeItem(key);
+            alert("Member Approved!"); renderPending();
+        }
 
-function setProfitable(val){
-  window._pfProfitable = val;
-  renderProfileEditor(document.getElementById('tab-content'));
-}
-
-async function handleProfilePhoto(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  window._pfPhoto = await fileToCompressedBase64(file);
-  const preview = document.getElementById('pf-preview');
-  if(preview){ preview.src = window._pfPhoto; }
-}
-
-async function saveProfile(){
-  const errEl = document.getElementById('pf-err');
-  const okEl = document.getElementById('pf-ok');
-  errEl.textContent=''; okEl.textContent='';
-  const update = {
-    fullName: document.getElementById('pf-fullname').value.trim(),
-    age: parseInt(document.getElementById('pf-age').value) || null,
-    years: parseInt(document.getElementById('pf-years').value) || 0,
-    instagram: document.getElementById('pf-insta').value.trim().replace(/^@/,''),
-    profitable: window._pfProfitable === undefined ? null : window._pfProfitable,
-    photoBase64: window._pfPhoto || null
-  };
-  try{
-    await db.collection('members').doc(currentUser.uid).update(update);
-    currentData = {...currentData, ...update};
-    okEl.textContent = 'Profile updated!';
-  }catch(e){
-    errEl.textContent = 'Save nahi hua: ' + e.message;
-  }
-}
-
-/* ---------------- owner panel ---------------- */
-async function renderOwnerPanel(el){
-  const snap = await db.collection('requests').where('status','==','pending').orderBy('createdAt','desc').get();
-  if(snap.empty){
-    el.innerHTML = `<div class="empty">Koi pending application nahi hai.</div>`;
-    return;
-  }
-  let items = '';
-  snap.forEach(doc=>{
-    const r = doc.data();
-    items += `
-      <div class="req-card">
-        ${r.photoBase64 ? `<img src="${r.photoBase64}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" />` : `<div class="avatar-fallback" style="width:44px;height:44px;">${initials(r.fullName)}</div>`}
-        <div class="info">
-          <div class="n">${escapeHtml(r.fullName)} <span class="mono" style="color:var(--muted);font-size:11.5px;">@${escapeHtml(r.username)}</span></div>
-          <div class="d">Age ${r.age||'—'} · ${r.years||0}y trading · Role: ${escapeHtml(r.role)} · IG: @${escapeHtml(r.instagram||'—')}</div>
-        </div>
-        <div class="req-actions">
-          <button class="btn btn-gold btn-sm" onclick="approveRequest('${doc.id}')">Approve</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectRequest('${doc.id}')">Reject</button>
-        </div>
-      </div>
-    `;
-  });
-  el.innerHTML = `<h2 style="font-size:20px;margin-bottom:18px;">Pending Applications (${snap.size})</h2>${items}`;
-}
-
-async function approveRequest(uid){
-  const reqDoc = await db.collection('requests').doc(uid).get();
-  if(!reqDoc.exists) return;
-  const data = reqDoc.data();
-  await db.collection('members').doc(uid).set({
-    uid, username: data.username, fullName: data.fullName, age: data.age,
-    years: data.years, instagram: data.instagram, role: data.role,
-    photoBase64: data.photoBase64 || null, profitable: null,
-    approved: true, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await db.collection('requests').doc(uid).delete();
-  loadTab('owner', true);
-}
-
-async function rejectRequest(uid){
-  await db.collection('requests').doc(uid).update({status:'rejected'});
-  loadTab('owner', true);
-}
-
-/* expose functions used by inline handlers */
-window.setView = setView;
-window.doLogin = doLogin;
-window.doJoin = doJoin;
-window.handleJoinPhoto = handleJoinPhoto;
-window.switchTab = switchTab;
-window.saveProfile = saveProfile;
-window.setProfitable = setProfitable;
-window.handleProfilePhoto = handleProfilePhoto;
-window.approveRequest = approveRequest;
-window.rejectRequest = rejectRequest;
-window.logout = logout;
-</script>
+        function renderApproved() {
+            const list = document.getElementById('approved-list'); list.innerHTML = "";
+            for(let i=0; i<localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if(key.startsWith('member_')) {
+                    let d = JSON.parse(localStorage.getItem(key));
+                    list.innerHTML += `<div class="member-card"><h3>${d.name}</h3><p>${d.role} | Exp: ${d.exp} | IG: ${d.insta}</p></div>`;
+                }
+            }
+        }
+    </script>
 </body>
 </html>
