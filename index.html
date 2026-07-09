@@ -14,11 +14,14 @@
         .header h2 { color: #ffffff; letter-spacing: 2px; }
         .input-group { margin-bottom: 15px; }
         label { font-size: 11px; color: #8c93a1; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; background: #1e222d; border: 1px solid var(--border); color: white; border-radius: 6px; }
+        input, select { width: 100%; padding: 12px; background: #1e222d; border: 1px solid var(--border); color: white; border-radius: 6px; outline: none; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(38, 166, 154, 0.3); }
         .row { display: flex; gap: 10px; }
         .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
         .btn-green { background: var(--accent); color: white; }
         .btn-green:hover { background: #1e877e; }
+        .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn-google:hover { background: #e2e2e2; }
         .section { display: none; }
         .admin-card { background: #1e222d; padding: 15px; margin-top: 10px; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .member-card { background: #1e222d; padding: 20px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; }
@@ -34,6 +37,10 @@
         <div class="input-group"><label>Password</label><input type="password" id="log-p"></div>
         <button class="btn btn-green" onclick="handleLogin()">Login</button>
         <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register</button>
+        <button type="button" class="btn-google" id="google-login-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" width="20" alt="G">
+            Sign in with Google
+        </button>
     </div>
 
     <div class="container section" id="reg-section">
@@ -41,13 +48,15 @@
         <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
         <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
         <button class="btn btn-green" onclick="handleRegister()">Register Account</button>
-        <button class="btn" onclick="show('login-section')">Back</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
     </div>
 
     <div class="container section" id="form-section">
         <div class="header"><h2>JOIN FXG TEAM</h2></div>
         <form id="app-form">
             <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
+            <input type="hidden" name="subject" value="New FXG Team Application!">
+            
             <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
             <div class="row">
                 <div class="input-group" style="flex:1"><label>Age</label><input type="number" name="age" id="app-age" required></div>
@@ -69,31 +78,43 @@
             </div>
             <button type="submit" class="btn btn-green">Submit Application</button>
         </form>
-        <button class="btn" onclick="show('members-dash')">Cancel</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('members-dash')">Cancel</button>
     </div>
 
     <div class="container section" id="members-dash" style="max-width: 800px;">
         <div class="header"><h2>TEAM MEMBERS</h2></div>
         <button class="btn btn-green" onclick="show('form-section')">+ JOIN FXG TEAM</button>
         <div id="approved-list"></div>
-        <button class="btn" onclick="show('login-section')">Logout</button>
+        <button class="btn" style="margin-top:20px; background:#2a2e39; color:white;" onclick="show('login-section')">Logout</button>
     </div>
 
     <div class="container section" id="owner-dash" style="max-width: 800px;">
         <div class="header"><h2>OWNER DASHBOARD (fxg.saurav)</h2></div>
         <h3>Pending Applications</h3>
         <div id="pending-list"></div>
-        <button class="btn" onclick="show('login-section')">Logout</button>
+        <button class="btn" style="margin-top:20px; background:#2a2e39; color:white;" onclick="show('login-section')">Logout</button>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        const firebaseConfig = { apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI", authDomain: "fxg-portal.firebaseapp.com", projectId: "fxg-portal", storageBucket: "fxg-portal.firebasestorage.app", messagingSenderId: "702222367751", appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).then(() => { show('members-dash'); renderApproved(); }).catch(console.error);
+        });
+    </script>
+
     <script>
-        // --- Core Navigation ---
+        // --- Navigation ---
         function show(id) {
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
             document.getElementById(id).style.display = 'block';
         }
 
-        // --- Auth & Registration ---
+        // --- Auth ---
         function handleRegister() {
             const u = document.getElementById('new-u').value;
             const p = document.getElementById('new-p').value;
@@ -109,24 +130,28 @@
             else alert("Invalid Credentials!");
         }
 
-        // --- Photo Handling (Base64) ---
-        let base64Photo = "";
+        // --- Photo Conversion ---
+        let base64Photo = "https://via.placeholder.com/80/131722/26a69a?text=FXG"; // Default image
         function previewImage(input) {
             const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                base64Photo = e.target.result;
-                const prev = document.getElementById('app-preview');
-                prev.src = base64Photo;
-                prev.style.display = 'block';
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64Photo = e.target.result;
+                    const prev = document.getElementById('app-preview');
+                    prev.src = base64Photo;
+                    prev.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
         }
 
-        // --- Application Handling ---
+        // --- Form Submit (Web3Forms + LocalStorage) ---
         const form = document.getElementById('app-form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // 1. Save to Dashboard
             const data = {
                 name: document.getElementById('app-name').value,
                 age: document.getElementById('app-age').value,
@@ -137,15 +162,19 @@
             };
             localStorage.setItem('app_' + data.name, JSON.stringify(data));
             
-            // Web3Forms Submit
-            fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
-            .then(() => {
-                alert("Application Sent! Pending Owner Approval.");
+            // 2. Send Email via Web3Forms
+            fetch("https://api.web3forms.com/submit", { 
+                method: "POST", 
+                body: new FormData(form) 
+            }).then(() => {
+                alert("Application Submitted! Sent to Owner for Approval.");
                 show('members-dash');
+                form.reset();
+                document.getElementById('app-preview').style.display = 'none';
             });
         });
 
-        // --- Admin/Owner Render ---
+        // --- Admin Dashboard ---
         function renderPending() {
             const list = document.getElementById('pending-list'); list.innerHTML = "";
             for(let i=0; i<localStorage.length; i++) {
@@ -153,8 +182,8 @@
                 if(key.startsWith('app_')) {
                     let d = JSON.parse(localStorage.getItem(key));
                     list.innerHTML += `<div class="admin-card">
-                        <div><strong>${d.name}</strong><br>${d.role}</div> 
-                        <button onclick="approve('${key}')" class="btn btn-green" style="width: auto;">Approve</button>
+                        <div><strong>${d.name}</strong><br><span style="color:var(--accent)">${d.role}</span></div> 
+                        <button onclick="approve('${key}')" class="btn btn-green" style="width: auto; margin-top:0;">Approve</button>
                     </div>`;
                 }
             }
@@ -164,10 +193,11 @@
             let d = JSON.parse(localStorage.getItem(key));
             localStorage.setItem('member_' + d.name, JSON.stringify(d));
             localStorage.removeItem(key);
-            alert("Member Approved! Now visible to team.");
+            alert("Member Approved! Live on Dashboard.");
             renderPending();
         }
 
+        // --- Members View ---
         function renderApproved() {
             const list = document.getElementById('approved-list'); list.innerHTML = "";
             for(let i=0; i<localStorage.length; i++) {
@@ -179,8 +209,8 @@
                             <img src="${d.photo}" class="member-avatar">
                             <div>
                                 <h3>${d.name}</h3>
-                                <p style="color:var(--accent)">${d.role}</p>
-                                <p style="font-size:12px;">Exp: ${d.exp} Yrs | Insta: @${d.insta}</p>
+                                <p style="color:var(--accent); font-weight:bold; margin-top:3px;">${d.role}</p>
+                                <p style="font-size:12px; color:#8c93a1; margin-top:5px;">Exp: ${d.exp} Yrs | IG: @${d.insta}</p>
                             </div>
                         </div>`;
                 }
