@@ -5,43 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO PORTAL</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0e1015; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        body { background: #0e1015; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .container { background: #131722; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px; border: 1px solid #2a2e39; }
         .header { text-align: center; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #1e222d; border: 1px solid #2a2e39; color: white; border-radius: 6px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #1e222d; border: 1px solid #2a2e39; color: white; border-radius: 6px; }
         .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .btn-green { background: #26a69a; color: white; }
+        .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .section { display: none; }
         .admin-card { background: #1e222d; padding: 15px; margin-top: 10px; border-radius: 6px; border: 1px solid #2a2e39; }
+        .tab-btn { padding: 10px; background: #2a2e39; color: white; border: none; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <div class="container section" id="login-section" style="display: block;">
-        <div class="header"><h2>FXG PORTAL LOGIN</h2></div>
+        <div class="header"><h2>FXG PORTAL</h2></div>
         <input type="text" id="log-u" placeholder="Username">
         <input type="password" id="log-p" placeholder="Password">
         <button class="btn btn-green" onclick="handleLogin()">Login</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register New Account</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register Account</button>
+        <button type="button" class="btn btn-google" id="google-login-btn">Sign in with Google</button>
     </div>
 
     <div class="container section" id="reg-section">
-        <div class="header"><h2>REGISTER</h2></div>
-        <input type="text" id="new-u" placeholder="Username">
-        <input type="password" id="new-p" placeholder="Password">
+        <div class="header"><h2>REGISTER MEMBER</h2></div>
+        <input type="text" id="new-u" placeholder="Choose Username">
+        <input type="password" id="new-p" placeholder="Set Password">
         <button class="btn btn-green" onclick="handleRegister()">Register & Save</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back to Login</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
+    </div>
+
+    <div class="container section" id="form-section">
+        <div class="header"><h2>APPLICATION</h2></div>
+        <input type="text" id="app-name" placeholder="Full Name">
+        <select id="app-role">
+            <option value="Lead Analyst">Lead Analyst (XAUUSD)</option>
+            <option value="SMC Specialist">SMC Specialist</option>
+            <option value="Independent Trader">Independent Trader</option>
+        </select>
+        <button class="btn btn-green" onclick="alert('Application Sent!')">Submit Application</button>
     </div>
 
     <div class="container section" id="dash-section" style="max-width: 800px;">
-        <div class="header"><h2>FXG DASHBOARD</h2></div>
-        <div id="admin-view">
-            <h3>Registered Members</h3>
-            <div id="user-list"></div>
-        </div>
+        <div class="header"><h2>OWNER DASHBOARD</h2></div>
+        <button class="tab-btn" onclick="loadUsers()">Show Members</button>
+        <div id="user-list"></div>
         <button class="btn" style="background:#2a2e39; color:white; margin-top:20px;" onclick="show('login-section')">Logout</button>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI",
+            authDomain: "fxg-portal.firebaseapp.com",
+            projectId: "fxg-portal",
+            storageBucket: "fxg-portal.firebasestorage.app",
+            messagingSenderId: "702222367751",
+            appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).then(() => show('form-section'));
+        });
+    </script>
 
     <script>
         function show(id) {
@@ -52,25 +86,19 @@
         function handleRegister() {
             const u = document.getElementById('new-u').value;
             const p = document.getElementById('new-p').value;
-            if(u && p) {
-                localStorage.setItem('user_' + u, p);
-                alert("Account created successfully!");
-                show('login-section');
-            } else { alert("Enter details!"); }
+            localStorage.setItem('user_' + u, p);
+            alert("Account created!");
+            show('login-section');
         }
 
         function handleLogin() {
             const u = document.getElementById('log-u').value;
             const p = document.getElementById('log-p').value;
             
-            // Owner Bypass
             if(u === 'fxg.saurav' && p === 'Xauusd@123') {
                 show('dash-section');
-                loadUsers();
-            } 
-            // Member Login
-            else if(localStorage.getItem('user_' + u) === p) {
-                alert("Login Successful! Welcome to FXG Team.");
+            } else if(localStorage.getItem('user_' + u) === p) {
+                show('form-section');
             } else {
                 alert("Invalid Credentials!");
             }
@@ -82,7 +110,7 @@
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('user_')) {
-                    list.innerHTML += `<div class="admin-card">Member: ${key.replace('user_', ' ')}</div>`;
+                    list.innerHTML += `<div class="admin-card">Member: ${key.replace('user_', '')}</div>`;
                 }
             }
         }
