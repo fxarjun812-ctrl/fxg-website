@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fxg Portal | Pro Team</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         /* GLOBAL STYLES */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
@@ -29,9 +28,10 @@
         .btn-green { background-color: #26a69a; }
         .btn-green:hover { background-color: #228b81; }
         .btn-red { background-color: #ff5252; }
+        .btn-google { background-color: #ffffff; color: #000000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 6px; padding: 12px; font-weight: bold; cursor: pointer; border: none; width: 100%; transition: 0.3s; }
+        .btn-google:hover { background-color: #e2e2e2; }
         
-        /* GOOGLE BUTTON CONTAINER */
-        .google-btn-wrapper { margin-top: 20px; display: flex; justify-content: center; }
+        /* DIVIDER */
         .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #8c93a1; font-size: 12px; }
         .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #2a2e39; }
         .divider::before { margin-right: .5em; }
@@ -50,7 +50,7 @@
         th { color: #8c93a1; text-transform: uppercase; font-size: 12px; }
         .action-btn { padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; margin-right: 5px; }
         
-        /* SECTIONS - Hidden by default */
+        /* SECTIONS - Hidden by default except login */
         #members-section, #form-section, #dashboard-section { display: none; }
     </style>
 </head>
@@ -62,45 +62,32 @@
             <p>Welcome to the community</p>
         </div>
         
-        <form onsubmit="handleLogin(event)">
+        <form id="manual-login-form">
             <div class="input-group">
-                <label>Username</label>
-                <input type="text" id="login-username" placeholder="Enter username (Owner: fxg.saurav)">
+                <label>Admin Username</label>
+                <input type="text" id="login-username" placeholder="Owner Login (e.g., fxg.saurav)">
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" placeholder="Enter password">
+                <input type="password" id="login-password" placeholder="Passcode">
             </div>
-            <button type="submit" class="btn btn-green">Login Manually</button>
+            <button type="submit" class="btn btn-green">Access Dashboard</button>
+            <p id="error-msg" style="color: #ff5252; text-align: center; margin-top: 10px; display: none; font-size: 14px;">Invalid credentials</p>
         </form>
 
-        <div class="divider">OR</div>
+        <div class="divider">OR FOR MEMBERS</div>
 
-        <div id="g_id_onload"
-             data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleGoogleLogin"
-             data-auto_prompt="false">
-        </div>
-        
-        <div class="google-btn-wrapper">
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="rectangular"
-                 data-theme="outline"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-logo_alignment="left">
-            </div>
-        </div>
-        <p style="text-align: center; font-size: 12px; color: #8c93a1; margin-top: 10px;">(Google Login requires Client ID to fully process)</p>
+        <button type="button" class="btn-google" id="google-login-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20" alt="Google">
+            Sign in with Google
+        </button>
     </div>
 
     <div class="container members-container" id="members-section">
         <div class="header">
             <h2>FXG TEAM MEMBERS</h2>
-            <p id="user-greeting">Elite Independent Traders</p>
+            <p id="user-greeting" style="color: #ffffff; font-weight: bold; margin-bottom: 10px;"></p>
+            <p>Elite Independent Traders</p>
         </div>
         
         <div class="members-grid">
@@ -125,7 +112,7 @@
             <h2>APPLICATION FORM</h2>
             <p>Independent Skills. Real Value.</p>
         </div>
-        <form onsubmit="submitForm(event)">
+        <form id="application-form">
             <div class="input-group">
                 <label>Full Name</label>
                 <input type="text" placeholder="Enter full name" required>
@@ -199,34 +186,68 @@
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Manual Login Logic
-        function handleLogin(event) {
+        // Manual Login (For Saurav Admin)
+        document.getElementById('manual-login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('login-username').value;
-            if(username.toLowerCase() === 'fxg.saurav') {
-                showSection('dashboard-section');
-            } else {
-                showSection('members-section');
-            }
-        }
-
-        // Real Google Login Processing Logic
-        function handleGoogleLogin(response) {
-            // response.credential contains the Google JWT Token
-            console.log("Encoded JWT ID token: " + response.credential);
+            const pass = document.getElementById('login-password').value;
             
-            // To fully use this, you decode the token to get the user's Name, Email, and Photo.
-            // Since this is frontend only, we are directly logging them into the members area!
-            alert("Google Login Successful! Welcome to Fxg.");
-            showSection('members-section');
-        }
+            if(username === 'fxg.saurav' && pass === '1234') { // Change password as needed
+                showSection('dashboard-section');
+                document.getElementById('error-msg').style.display = 'none';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        });
 
-        function submitForm(event) {
+        // Form Submit Simulation
+        document.getElementById('application-form').addEventListener('submit', function(event) {
             event.preventDefault();
             alert("Application Submitted! Sent to Fxg Saurav's Dashboard.");
             event.target.reset();
             showSection('members-section');
-        }
+        });
+    </script>
+
+    <script type="module">
+        // Import Firebase Functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Your Exact Firebase Configuration from Screenshot
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI",
+            authDomain: "fxg-portal.firebaseapp.com",
+            projectId: "fxg-portal",
+            storageBucket: "fxg-portal.firebasestorage.app",
+            messagingSenderId: "702222367751",
+            appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2",
+            measurementId: "G-1RWMGLZ5PY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Connect Button to Google Login
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // This gives you a Google Access Token.
+                    const user = result.user;
+                    console.log("Logged in user:", user);
+                    
+                    // Show user's actual Google Name on the portal!
+                    document.getElementById('user-greeting').innerText = "Welcome, " + user.displayName + "!";
+                    
+                    // Send them to the members section
+                    showSection('members-section');
+                }).catch((error) => {
+                    console.error("Error logging in:", error);
+                    alert("Login failed or was closed. Please try again.");
+                });
+        });
     </script>
 </body>
 </html>
