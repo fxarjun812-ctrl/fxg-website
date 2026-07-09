@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Hub</title>
     <style>
-        /* FXG ULTIMATE V5 DESIGN SYSTEM */
+        /* FXG ULTIMATE V6 DESIGN SYSTEM - ADMIN CONTROLS */
         :root { 
             --primary: #00E676; 
             --primary-hover: #00c765;
             --bg-dark: #05070a; 
-            --panel-bg: rgba(17, 20, 29, 0.7); /* Glassmorphism */
+            --panel-bg: rgba(17, 20, 29, 0.7); 
             --border-color: rgba(255, 255, 255, 0.08); 
             --text-main: #FFFFFF;
             --text-muted: #8B94A5;
             --glow: 0 0 20px rgba(0, 230, 118, 0.15);
+            --danger: #ff5252;
         }
         * { box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
@@ -76,6 +77,10 @@
         .btn-dark { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: var(--text-main); margin-top: 15px; }
         .btn-dark:hover { background: rgba(255,255,255,0.08); }
         .btn-google { background: #ffffff; color: #000; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* DANGER BUTTON (KICK) */
+        .btn-red { background: rgba(255, 82, 82, 0.1); color: var(--danger); border: 1px solid var(--danger); font-size: 0.9rem; padding: 10px; }
+        .btn-red:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4); }
 
         /* MEMBERS GRID */
         .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
@@ -123,6 +128,7 @@
 </head>
 <body>
 
+    <!-- NAVBAR -->
     <nav class="app-nav" id="main-nav">
         <h1>FXG <span>PRO</span></h1>
         <div>
@@ -131,6 +137,7 @@
         </div>
     </nav>
 
+    <!-- AUTH WRAPPER -->
     <div class="auth-wrapper" id="auth-wrapper">
         <div class="auth-container section" id="login-section" style="display: block;">
             <div class="header-title"><h2>WELCOME BACK</h2><p>Sign in to the elite trading hub</p></div>
@@ -152,6 +159,7 @@
         </div>
     </div>
 
+    <!-- APPLICATION FORM -->
     <div class="dash-container section" id="form-section">
         <div class="auth-container" style="margin: 0 auto; max-width: 650px;">
             <div class="header-title"><h2>FXG APPLICATION</h2><p>Submit your trading profile</p></div>
@@ -198,32 +206,37 @@
         </div>
     </div>
 
+    <!-- MEMBERS VIEW (NORMAL) -->
     <div class="dash-container section" id="members-dash">
         <h2 style="font-size: 2.2rem; margin-bottom: 5px;">Pro Team Roster</h2>
         <p style="color: var(--text-muted); margin-bottom: 20px;">Verified Elite Independent Traders of FXG</p>
         <div class="members-grid" id="approved-list"></div>
     </div>
 
+    <!-- OWNER DASHBOARD -->
     <div class="dash-container section" id="owner-dash">
         <h2 style="font-size: 2.2rem; margin-bottom: 30px;">Owner Command Center</h2>
         
+        <!-- Pending Approvals -->
         <div class="owner-section-box">
             <h3 class="owner-section-title"><span style="color: #ffb74d;">Pending Approvals</span></h3>
             <div class="admin-list" id="pending-list"></div>
         </div>
 
+        <!-- Active Team with Kick Option -->
         <div class="owner-section-box">
-            <h3 class="owner-section-title"><span style="color: var(--primary);">Active Team Roster</span></h3>
+            <h3 class="owner-section-title"><span style="color: var(--primary);">Active Team Management</span></h3>
             <div class="members-grid" id="owner-approved-list" style="margin-top: 10px;"></div>
         </div>
     </div>
 
+    <!-- POPUP MODAL -->
     <div class="modal-overlay" id="details-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div class="modal-header">
-                <img id="modal-photo" src="" alt="Applicant Photo">
-                <h3 id="modal-name">Applicant Name</h3>
+                <img id="modal-photo" src="" alt="Photo">
+                <h3 id="modal-name">Name</h3>
                 <p id="modal-role">Role</p>
             </div>
             <div class="modal-body">
@@ -236,6 +249,7 @@
         </div>
     </div>
 
+    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -248,6 +262,7 @@
         });
     </script>
 
+    <!-- CORE LOGIC -->
     <script>
         function showSection(id, isLoggedIn = false) {
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
@@ -269,11 +284,7 @@
         
         function handleLogin() {
             const u = document.getElementById('log-u').value; const p = document.getElementById('log-p').value;
-            if(u === 'fxg.saurav' && p === 'Xauusd@123') { 
-                showSection('owner-dash', true); 
-                renderPending(); 
-                renderApproved(); // Show active roster to admin
-            }
+            if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderPending(); renderApproved(); }
             else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
             else alert("Invalid Credentials!");
         }
@@ -298,7 +309,7 @@
                 email: document.getElementById('app-email').value,
                 age: document.getElementById('app-age').value,
                 exp: document.getElementById('app-exp').value,
-                prof: document.getElementById('app-prof').value, // NEW: Profitable Status
+                prof: document.getElementById('app-prof').value, 
                 insta: document.getElementById('app-insta').value,
                 role: document.getElementById('app-role').value,
                 photo: base64Photo
@@ -336,51 +347,64 @@
             let d = JSON.parse(localStorage.getItem(key)); 
             localStorage.setItem('member_' + d.name, JSON.stringify(d)); 
             localStorage.removeItem(key); 
-            renderPending(); 
-            renderApproved(); 
+            renderPending(); renderApproved(); 
+        }
+
+        // NEW KICK FUNCTIONALITY
+        function kickMember(key) {
+            if(confirm("WARNING: Are you sure you want to remove this member from the FXG Pro Team?")) {
+                localStorage.removeItem(key);
+                renderApproved();
+            }
         }
 
         function renderApproved() {
-            const list1 = document.getElementById('approved-list'); // Normal members view
-            const list2 = document.getElementById('owner-approved-list'); // Admin view
-            let html = "";
-            let count = 0;
+            const list1 = document.getElementById('approved-list'); // Members View
+            const list2 = document.getElementById('owner-approved-list'); // Admin View
+            let html1 = ""; let html2 = ""; let count = 0;
 
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('member_')) {
                     count++;
                     let d = JSON.parse(localStorage.getItem(key));
-                    let profStatus = d.prof ? d.prof : "Trader"; // fallback
-                    html += `
+                    let profStatus = d.prof ? d.prof : "Trader"; 
+                    
+                    let cardBase = `
+                        <img src="${d.photo}" class="member-avatar">
+                        <h3>${d.name}</h3>
+                        <div class="member-role">${d.role}</div>
+                        <span class="member-prof">• ${profStatus}</span>
+                        <div class="member-details"><span>🏆 ${d.exp} Yrs</span><span>📱 @${d.insta}</span></div>
+                    `;
+
+                    // Normal User View (No Kick Button)
+                    html1 += `<div class="member-card">${cardBase}</div>`;
+                    
+                    // Admin View (With Kick Button)
+                    html2 += `
                         <div class="member-card">
-                            <img src="${d.photo}" class="member-avatar">
-                            <h3>${d.name}</h3>
-                            <div class="member-role">${d.role}</div>
-                            <span class="member-prof">• ${profStatus}</span>
-                            <div class="member-details"><span>🏆 ${d.exp} Yrs</span><span>📱 @${d.insta}</span></div>
+                            ${cardBase}
+                            <button onclick="kickMember('${key}')" class="btn btn-red" style="margin-top:20px; width:100%;">Remove from Team</button>
                         </div>`;
                 }
             }
             
-            if(count === 0) html = "<p style='color:var(--text-muted); grid-column:1/-1; text-align:center;'>No verified members yet.</p>";
+            if(count === 0) {
+                let msg = "<p style='color:var(--text-muted); grid-column:1/-1; text-align:center;'>No active members yet.</p>";
+                html1 = msg; html2 = msg;
+            }
             
-            if(list1) list1.innerHTML = html;
-            if(list2) list2.innerHTML = html;
+            if(list1) list1.innerHTML = html1;
+            if(list2) list2.innerHTML = html2;
         }
 
-        // --- MODAL LOGIC ---
         function openModal(key) {
             let d = JSON.parse(localStorage.getItem(key));
-            document.getElementById('modal-photo').src = d.photo;
-            document.getElementById('modal-name').innerText = d.name;
-            document.getElementById('modal-role').innerText = d.role;
-            document.getElementById('modal-prof').innerText = d.prof || "N/A";
-            document.getElementById('modal-email').innerText = d.email || "Not Provided";
-            document.getElementById('modal-insta').innerText = "@" + d.insta;
-            document.getElementById('modal-exp').innerText = d.exp + " Years";
-            document.getElementById('modal-age').innerText = d.age + " Years";
-            
+            document.getElementById('modal-photo').src = d.photo; document.getElementById('modal-name').innerText = d.name;
+            document.getElementById('modal-role').innerText = d.role; document.getElementById('modal-prof').innerText = d.prof || "N/A";
+            document.getElementById('modal-email').innerText = d.email || "Not Provided"; document.getElementById('modal-insta').innerText = "@" + d.insta;
+            document.getElementById('modal-exp').innerText = d.exp + " Years"; document.getElementById('modal-age').innerText = d.age + " Years";
             document.getElementById('details-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('details-modal').style.display = 'none'; }
