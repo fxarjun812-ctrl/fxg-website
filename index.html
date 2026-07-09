@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fxg Team | Portal</title>
+    <style>
+        /* GLOBAL STYLES */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: #0e1015; color: #d1d4dc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: #131722; padding: 40px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); width: 100%; max-width: 500px; border: 1px solid #2a2e39; position: relative; }
+        .dashboard-container { max-width: 1000px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { color: #ffffff; letter-spacing: 2px; font-size: 24px; margin-bottom: 5px; }
+        .header p { color: #26a69a; font-size: 14px; }
+        .header-red p { color: #ff5252; }
+        
+        /* FORM ELEMENTS */
+        .input-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+        .row { display: flex; gap: 15px; }
+        .row .input-group { flex: 1; }
+        label { font-size: 13px; margin-bottom: 8px; color: #8c93a1; text-transform: uppercase; letter-spacing: 1px; }
+        input, select { background-color: #1e222d; border: 1px solid #2a2e39; color: #ffffff; padding: 12px; border-radius: 6px; font-size: 15px; outline: none; transition: all 0.3s; }
+        input:focus, select:focus { border-color: #26a69a; box-shadow: 0 0 8px rgba(38, 166, 154, 0.3); }
+        input[type="file"] { padding: 8px; color: #8c93a1; }
+        
+        /* BUTTONS */
+        .btn { color: #ffffff; border: none; padding: 15px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-green { background-color: #26a69a; }
+        .btn-green:hover { background-color: #228b81; }
+        .btn-red { background-color: #ff5252; }
+        .btn-red:hover { background-color: #cc4242; }
+        
+        /* ADMIN LINK */
+        .admin-link { position: absolute; top: 15px; right: 20px; color: #8c93a1; font-size: 12px; text-decoration: none; cursor: pointer; }
+        .admin-link:hover { color: #ffffff; }
 
+        /* DASHBOARD TABLE */
+        .table-wrapper { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px; border-bottom: 1px solid #2a2e39; font-size: 14px; }
+        th { color: #8c93a1; text-transform: uppercase; font-size: 12px; }
+        .action-btn { padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; margin-right: 5px; }
+        
+        /* SECTIONS HIDDEN BY DEFAULT */
+        #login-section, #dashboard-section { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PUBLIC APPLICATION FORM SECTION -->
+    <div class="container" id="form-section">
+        <span class="admin-link" onclick="switchSection('login-section')">Owner Login 🔒</span>
+        <div class="header">
+            <h2>JOIN FXG TEAM</h2>
+            <p>Independent Skills. Real Value.</p>
+        </div>
+        <form onsubmit="submitForm(event)">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter full name" required>
+            </div>
+            <div class="row">
+                <div class="input-group"><label>Age</label><input type="number" placeholder="Age" required></div>
+                <div class="input-group"><label>Exp (Years)</label><input type="number" placeholder="e.g., 3" required></div>
+            </div>
+            <div class="input-group">
+                <label>Instagram Username</label>
+                <input type="text" placeholder="@username" required>
+            </div>
+            <div class="input-group">
+                <label>Role in Fxg Team</label>
+                <select required>
+                    <option value="" disabled selected>Select a role...</option>
+                    <option>Lead Analyst</option>
+                    <option>SMC Specialist</option>
+                    <option>Independent Trader</option>
+                    <option>Normal Member</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Consistently Profitable?</label>
+                <select required>
+                    <option value="" disabled selected>Select status...</option>
+                    <option>Yes</option>
+                    <option>Working on it</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Profile Photo</label>
+                <input type="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-green">Submit Application</button>
+        </form>
+    </div>
+
+    <!-- 2. OWNER LOGIN SECTION -->
+    <div class="container" id="login-section">
+        <span class="admin-link" onclick="switchSection('form-section')">Back to Form</span>
+        <div class="header header-red">
+            <h2 style="color: #ff5252;">OWNER ACCESS</h2>
+            <p>Restricted Portal - Fxg Saurav Only</p>
+        </div>
+        <form onsubmit="checkLogin(event)">
+            <div class="input-group">
+                <label>Admin Username</label>
+                <input type="text" id="username" placeholder="e.g., fxg.saurav" required>
+            </div>
+            <div class="input-group">
+                <label>Security Passcode</label>
+                <input type="password" id="password" placeholder="Enter passcode" required>
+            </div>
+            <button type="submit" class="btn btn-red">Access Dashboard</button>
+            <p id="error-msg" style="color: #ff5252; text-align: center; margin-top: 15px; display: none; font-size: 14px;">Access Denied. Incorrect credentials.</p>
+        </form>
+    </div>
+
+    <!-- 3. ADMIN DASHBOARD SECTION -->
+    <div class="container dashboard-container" id="dashboard-section">
+        <div class="header" style="text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h2>FXG OWNER DASHBOARD</h2>
+            <button onclick="switchSection('form-section')" class="action-btn" style="background-color: #2a2e39;">Logout</button>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Exp</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/40" style="border-radius: 50%;"></td>
+                        <td>Demo User</td>
+                        <td>21</td>
+                        <td>2 Yrs</td>
+                        <td>SMC Specialist</td>
+                        <td>
+                            <button class="action-btn btn-green">Approve</button>
+                            <button class="action-btn btn-red">Reject</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Function to switch between the different screens
+        function switchSection(sectionId) {
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'none';
+            
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Clear error message if going back to login
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        // Form submission popup
+        function submitForm(event) {
+            event.preventDefault();
+            alert("Application Submitted Successfully! Waiting for Fxg Saurav's approval.");
+            event.target.reset(); // Clear the form
+        }
+
+        // Login validation logic
+        function checkLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            // Checking credentials (fxg.saurav / FxgAdmin2026)
+            if(user === 'fxg.saurav' && pass === 'FxgAdmin2026') {
+                switchSection('dashboard-section');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
