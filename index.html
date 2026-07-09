@@ -22,6 +22,7 @@
         label { font-size: 13px; margin-bottom: 8px; color: #8c93a1; text-transform: uppercase; letter-spacing: 1px; }
         input, select { background-color: #1e222d; border: 1px solid #2a2e39; color: #ffffff; padding: 12px; border-radius: 6px; font-size: 15px; outline: none; transition: all 0.3s; }
         input:focus, select:focus { border-color: #26a69a; box-shadow: 0 0 8px rgba(38, 166, 154, 0.3); }
+        input[type="file"] { padding: 8px; color: #8c93a1; }
         
         /* BUTTONS */
         .btn { color: #ffffff; border: none; padding: 15px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
@@ -78,7 +79,7 @@
         <div class="divider">OR FOR MEMBERS</div>
 
         <button type="button" class="btn-google" id="google-login-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20" alt="Google">
+            <img src="https://developers.google.com/identity/images/g-logo.png" width="20" alt="Google">
             Sign in with Google
         </button>
     </div>
@@ -86,7 +87,7 @@
     <div class="container members-container" id="members-section">
         <div class="header">
             <h2>FXG TEAM MEMBERS</h2>
-            <p id="user-greeting" style="color: #ffffff; font-weight: bold; margin-bottom: 10px;"></p>
+            <p id="user-greeting" style="color: #ffffff; font-weight: bold; margin-bottom: 10px; font-size: 18px;"></p>
             <p>Elite Independent Traders</p>
         </div>
         
@@ -125,15 +126,20 @@
                 <label>Instagram Username</label>
                 <input type="text" placeholder="@username" required>
             </div>
+            
             <div class="input-group">
                 <label>Role in Fxg Team</label>
-                <select required>
+                <select id="user-role" required>
                     <option value="" disabled selected>Select a role...</option>
-                    <option>Lead Analyst</option>
-                    <option>SMC Specialist</option>
-                    <option>Independent Trader</option>
+                    <option value="Owner/CEO">Owner / CEO</option>
+                    <option value="Admin">Admin / Manager</option>
+                    <option value="Lead Analyst">Lead Analyst (XAUUSD)</option>
+                    <option value="SMC Specialist">SMC Specialist</option>
+                    <option value="Independent Trader">Independent Trader</option>
+                    <option value="Normal Member">Normal Member</option>
                 </select>
             </div>
+            
             <div class="input-group">
                 <label>Profile Photo</label>
                 <input type="file" accept="image/*" required>
@@ -186,7 +192,7 @@
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Manual Login (For Saurav Admin)
+        // Manual Login (For Admin)
         document.getElementById('manual-login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('login-username').value;
@@ -195,6 +201,7 @@
             if(username === 'fxg.saurav' && pass === '1234') { // Change password as needed
                 showSection('dashboard-section');
                 document.getElementById('error-msg').style.display = 'none';
+                document.getElementById('manual-login-form').reset();
             } else {
                 document.getElementById('error-msg').style.display = 'block';
             }
@@ -203,18 +210,16 @@
         // Form Submit Simulation
         document.getElementById('application-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            alert("Application Submitted! Sent to Fxg Saurav's Dashboard.");
+            alert("Application Submitted Successfully!");
             event.target.reset();
             showSection('members-section');
         });
     </script>
 
     <script type="module">
-        // Import Firebase Functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Your Exact Firebase Configuration from Screenshot
         const firebaseConfig = {
             apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI",
             authDomain: "fxg-portal.firebaseapp.com",
@@ -225,16 +230,13 @@
             measurementId: "G-1RWMGLZ5PY"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // Connect Button to Google Login
         document.getElementById('google-login-btn').addEventListener('click', () => {
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    // This gives you a Google Access Token.
                     const user = result.user;
                     console.log("Logged in user:", user);
                     
