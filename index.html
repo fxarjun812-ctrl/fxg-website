@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Hub</title>
     <style>
-        /* FXG ULTIMATE V7 DESIGN SYSTEM - CEO EDITION */
+        /* FXG ULTIMATE V8 DESIGN SYSTEM - SPLIT SCREEN CEO EDITION */
         :root { 
             --primary: #00E676; 
             --primary-hover: #00c765;
@@ -55,7 +55,7 @@
             padding: 45px 40px; border-radius: 16px; width: 100%; max-width: 450px; 
             border: 1px solid var(--border-color); box-shadow: 0 25px 50px rgba(0,0,0,0.9); 
         }
-        .dash-container { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .dash-container { display: none; padding: 40px; max-width: 1300px; margin: 0 auto; width: 100%; }
         
         .header-title { text-align: center; margin-bottom: 35px; }
         .header-title h2 { font-size: 1.8rem; margin-bottom: 8px; letter-spacing: 1px; }
@@ -82,7 +82,7 @@
         .btn-red { background: rgba(255, 82, 82, 0.05); color: var(--danger); border: 1px solid var(--danger); font-size: 0.85rem; padding: 10px; border-radius: 6px; cursor: pointer; transition: 0.3s;}
         .btn-red:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4); }
 
-        /* DASHBOARD STATS (NEW) */
+        /* DASHBOARD STATS */
         .dash-stats { display: flex; gap: 20px; margin-bottom: 30px; }
         .stat-card { flex: 1; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .stat-info h4 { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
@@ -91,39 +91,50 @@
         .stat-icon.team { background: rgba(0, 230, 118, 0.1); color: var(--primary); border: 1px solid rgba(0, 230, 118, 0.2); }
         .stat-icon.pending { background: rgba(255, 170, 0, 0.1); color: var(--warning); border: 1px solid rgba(255, 170, 0, 0.2); }
 
+        /* NEW: ADMIN SPLIT LAYOUT (SIDE-BY-SIDE) */
+        .admin-split-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr; /* Left side 380px, Right side takes remaining space */
+            gap: 30px;
+            align-items: start;
+        }
+        @media (max-width: 1024px) {
+            .admin-split-layout { grid-template-columns: 1fr; /* Stacks on smaller screens */ }
+        }
+
         /* OWNER DASHBOARD SECTIONS */
-        .owner-section-box { background: var(--panel-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        .owner-section-box { background: var(--panel-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
         .owner-section-box.warning-glow { border-top: 2px solid var(--warning); box-shadow: var(--glow-orange); background: linear-gradient(180deg, rgba(255,170,0,0.03) 0%, rgba(15,18,25,0.75) 100%); }
         .owner-section-box.success-glow { border-top: 2px solid var(--primary); box-shadow: var(--glow-green); }
-        .owner-section-title { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; margin-bottom: 25px; display: flex; align-items: center; font-size: 1.3rem; }
+        .owner-section-title { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; margin-bottom: 25px; display: flex; align-items: center; font-size: 1.2rem; }
 
-        /* TOP LEVEL PENDING ADMIN CARDS (NEW) */
+        /* PENDING ADMIN CARDS (LEFT COLUMN) */
         .admin-list { display: flex; flex-direction: column; gap: 15px; }
         .admin-card { 
-            background: rgba(5, 7, 10, 0.8); padding: 20px; border-radius: 12px; 
-            border: 1px solid rgba(255, 170, 0, 0.3); display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(5, 7, 10, 0.8); padding: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255, 170, 0, 0.3); display: flex; flex-direction: column; gap: 15px; 
             border-left: 4px solid var(--warning); transition: 0.3s;
         }
-        .admin-card:hover { transform: translateX(5px); background: rgba(15, 20, 25, 0.9); border-color: var(--warning); }
+        .admin-card:hover { transform: translateY(-3px); background: rgba(15, 20, 25, 0.9); border-color: var(--warning); }
         .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-icon-wait { width: 45px; height: 45px; background: rgba(255, 170, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--warning); border: 1px dashed var(--warning); }
-        .admin-details strong { font-size: 1.15rem; display: block; margin-bottom: 3px; color: #fff; }
-        .admin-details .badge { background: rgba(0,230,118,0.1); color: var(--primary); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-right: 8px;}
-        .admin-details span { color: var(--text-muted); font-size: 0.85rem; }
-        .admin-actions { display: flex; gap: 10px; }
-        .btn-sm { padding: 10px 18px; font-size: 0.85rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .admin-icon-wait { width: 40px; height: 40px; background: rgba(255, 170, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--warning); border: 1px dashed var(--warning); }
+        .admin-details strong { font-size: 1.1rem; display: block; margin-bottom: 3px; color: #fff; }
+        .admin-details .badge { background: rgba(0,230,118,0.1); color: var(--primary); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-right: 8px;}
+        .admin-details span { color: var(--text-muted); font-size: 0.8rem; }
+        .admin-actions { display: flex; gap: 10px; width: 100%;}
+        .btn-sm { flex: 1; padding: 10px; font-size: 0.8rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.3s; text-align: center;}
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #fff; }
         .btn-outline:hover { background: rgba(255,255,255,0.1); }
         .btn-solid-green { background: var(--primary); border: none; color: #000; box-shadow: 0 0 10px rgba(0,230,118,0.3); }
         .btn-solid-green:hover { background: var(--primary-hover); box-shadow: 0 0 15px rgba(0,230,118,0.6); }
 
-        /* MEMBERS GRID (ACTIVE) */
-        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .member-card { background: rgba(5, 7, 10, 0.6); border-radius: 14px; padding: 30px 25px; border: 1px solid var(--border-color); text-align: center; position: relative; overflow: hidden; transition: 0.3s; }
+        /* MEMBERS GRID (RIGHT COLUMN ACTIVE TEAM) */
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .member-card { background: rgba(5, 7, 10, 0.6); border-radius: 14px; padding: 25px 20px; border: 1px solid var(--border-color); text-align: center; position: relative; overflow: hidden; transition: 0.3s; }
         .member-card:hover { transform: translateY(-5px); border-color: rgba(0, 230, 118, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .member-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--primary), #00b35c); }
-        .member-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--bg-dark); outline: 2px solid var(--primary); object-fit: cover; margin: 0 auto 15px;}
-        .member-card h3 { font-size: 1.2rem; margin-bottom: 5px; color: #fff; }
+        .member-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--bg-dark); outline: 2px solid var(--primary); object-fit: cover; margin: 0 auto 15px;}
+        .member-card h3 { font-size: 1.15rem; margin-bottom: 5px; color: #fff; }
         .member-role { color: var(--primary); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px;}
         .member-prof { font-size: 0.75rem; color: var(--warning); margin-bottom: 20px; display: block;}
         .member-details { display: flex; justify-content: center; gap: 15px; color: var(--text-muted); font-size: 0.8rem; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);}
@@ -259,16 +270,21 @@
             </div>
         </div>
 
-        <!-- Pending Approvals (Warning Glow) -->
-        <div class="owner-section-box warning-glow">
-            <h3 class="owner-section-title"><span style="color: var(--warning);">Pending Approvals</span></h3>
-            <div class="admin-list" id="pending-list"></div>
-        </div>
+        <!-- SPLIT SCREEN LAYOUT -->
+        <div class="admin-split-layout">
+            
+            <!-- LEFT COLUMN: Pending Approvals (Warning Glow) -->
+            <div class="owner-section-box warning-glow" style="margin-bottom: 0;">
+                <h3 class="owner-section-title"><span style="color: var(--warning);">Pending Approvals</span></h3>
+                <div class="admin-list" id="pending-list"></div>
+            </div>
 
-        <!-- Active Team (Success Glow) -->
-        <div class="owner-section-box success-glow">
-            <h3 class="owner-section-title"><span style="color: var(--primary);">Active Team Roster</span></h3>
-            <div class="members-grid" id="owner-approved-list"></div>
+            <!-- RIGHT COLUMN: Active Team (Success Glow) -->
+            <div class="owner-section-box success-glow" style="margin-bottom: 0;">
+                <h3 class="owner-section-title"><span style="color: var(--primary);">Active Team Roster</span></h3>
+                <div class="members-grid" id="owner-approved-list"></div>
+            </div>
+
         </div>
     </div>
 
@@ -385,7 +401,7 @@
                         </div> 
                         <div class="admin-actions">
                             <button onclick="openModal('${key}')" class="btn-sm btn-outline">View Details</button>
-                            <button onclick="approve('${key}')" class="btn-sm btn-solid-green">Approve Request</button>
+                            <button onclick="approve('${key}')" class="btn-sm btn-solid-green">Approve</button>
                         </div>
                     </div>`;
                 }
