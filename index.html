@@ -3,96 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FXG PRO PORTAL | EXCLUSIVE TEAM</title>
+    <title>FXG PRO | Elite Trading Hub</title>
     <style>
-        /* FXG DESIGN SYSTEM - Dark, Professional, Trading Aesthetic */
-        :root { --accent: #26a69a; --bg: #0e1015; --card: #131722; --border: #2a2e39; --text: #d1d4dc; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { background: var(--card); padding: 30px; border-radius: 12px; width: 100%; max-width: 600px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { color: #ffffff; letter-spacing: 2px; }
-        .input-group { margin-bottom: 15px; }
-        label { font-size: 11px; color: #8c93a1; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; background: #1e222d; border: 1px solid var(--border); color: white; border-radius: 6px; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(38, 166, 154, 0.3); }
-        .row { display: flex; gap: 10px; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
-        .btn-green { background: var(--accent); color: white; }
-        .btn-green:hover { background: #1e877e; }
-        .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        /* FXG PREMIUM DESIGN SYSTEM */
+        :root { 
+            --primary: #00E676; /* Neon Trading Green */
+            --primary-hover: #00c765;
+            --bg-dark: #0B0E14; /* Deep Crypto Space */
+            --panel-bg: #151924; 
+            --border-color: #2A2E39; 
+            --text-main: #FFFFFF;
+            --text-muted: #8B94A5;
+        }
+        * { box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            background-image: radial-gradient(circle at top right, rgba(0, 230, 118, 0.05), transparent 40%);
+            color: var(--text-main); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column;
+        }
+
+        /* NAVBAR (Shows only after login) */
+        .app-nav {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .app-nav h1 { font-size: 1.2rem; letter-spacing: 2px; color: var(--text-main); }
+        .app-nav span { color: var(--primary); font-weight: bold; }
+        .nav-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .nav-btn:hover { border-color: #ff5252; color: #ff5252; }
+
+        /* CENTERED AUTH CONTAINERS */
+        .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .auth-container { 
+            background: var(--panel-bg); 
+            padding: 40px; 
+            border-radius: 12px; 
+            width: 100%; 
+            max-width: 420px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+        }
+
+        /* MAIN DASHBOARD CONTAINERS */
+        .dash-container { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
+        /* TYPOGRAPHY & FORMS */
+        .header-title { text-align: center; margin-bottom: 30px; }
+        .header-title h2 { font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 5px; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; font-weight: 600;}
+        input, select { width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none; transition: 0.3s; font-size: 0.95rem;}
+        input:focus, select:focus { border-color: var(--primary); background: rgba(0, 230, 118, 0.03); }
+        .row { display: flex; gap: 15px; }
+        
+        /* BUTTONS */
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; letter-spacing: 0.5px;}
+        .btn-green { background: var(--primary); color: #000; }
+        .btn-green:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
+        .btn-dark { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); margin-top: 15px; }
+        .btn-dark:hover { background: rgba(255,255,255,0.05); }
+        .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-google:hover { background: #e2e2e2; }
+
+        /* MEMBERS GRID UI */
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .member-card { background: var(--panel-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; overflow: hidden;}
+        .member-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .member-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); }
+        .member-avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--panel-bg); outline: 2px solid var(--primary); object-fit: cover; margin: 0 auto 15px; background: #000;}
+        .member-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        .member-role { color: var(--primary); font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .member-details { display: flex; justify-content: center; gap: 15px; color: var(--text-muted); font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;}
+
+        /* ADMIN LIST */
+        .admin-list { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .admin-card { background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #ffb74d; }
+        .admin-info strong { font-size: 1.1rem; }
+        .admin-info span { color: var(--text-muted); font-size: 0.9rem; display: block; margin-top: 5px;}
+
+        #app-preview { width: 80px; height: 80px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; border: 2px solid var(--primary); }
         .section { display: none; }
-        .admin-card { background: #1e222d; padding: 15px; margin-top: 10px; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .member-card { background: #1e222d; padding: 20px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; }
-        .member-avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-        #app-preview { max-width: 100px; margin-top: 10px; border-radius: 50%; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container section" id="login-section" style="display: block;">
-        <div class="header"><h2>FXG PORTAL</h2><p>Sign in to your trading hub</p></div>
-        <div class="input-group"><label>Username</label><input type="text" id="log-u"></div>
-        <div class="input-group"><label>Password</label><input type="password" id="log-p"></div>
-        <button class="btn btn-green" onclick="handleLogin()">Login</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register</button>
-        <button type="button" class="btn-google" id="google-login-btn">
-            <img src="https://developers.google.com/identity/images/g-logo.png" width="20" alt="G">
-            Sign in with Google
-        </button>
-    </div>
+    <nav class="app-nav" id="main-nav">
+        <h1>FXG <span>PRO</span></h1>
+        <div>
+            <button class="nav-btn" onclick="showSection('form-section', true)" id="nav-join-btn">+ Join Team</button>
+            <button class="nav-btn" onclick="logout()" style="margin-left: 10px;">Logout</button>
+        </div>
+    </nav>
 
-    <div class="container section" id="reg-section">
-        <div class="header"><h2>REGISTER</h2></div>
-        <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
-        <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
-        <button class="btn btn-green" onclick="handleRegister()">Register Account</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
-    </div>
-
-    <div class="container section" id="form-section">
-        <div class="header"><h2>JOIN FXG TEAM</h2></div>
-        <form id="app-form">
-            <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
-            <input type="hidden" name="subject" value="New FXG Team Application!">
-            
-            <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
-            <div class="row">
-                <div class="input-group" style="flex:1"><label>Age</label><input type="number" name="age" id="app-age" required></div>
-                <div class="input-group" style="flex:1"><label>Exp (Yrs)</label><input type="number" name="exp" id="app-exp" required></div>
+    <div class="auth-wrapper" id="auth-wrapper">
+        
+        <div class="auth-container section" id="login-section" style="display: block;">
+            <div class="header-title">
+                <h2>WELCOME BACK</h2>
+                <p>Sign in to the elite trading hub</p>
             </div>
-            <div class="input-group"><label>Instagram</label><input type="text" name="insta" id="app-insta" required></div>
-            <div class="input-group">
-                <label>Target Role</label>
-                <select name="role" id="app-role">
-                    <option value="Owner">Owner</option>
-                    <option value="CEO">CEO</option>
-                    <option value="Normal Member">Normal Member</option>
-                </select>
+            <div class="input-group"><label>Username</label><input type="text" id="log-u" placeholder="Enter username"></div>
+            <div class="input-group"><label>Password</label><input type="password" id="log-p" placeholder="Enter password"></div>
+            <button class="btn btn-green" onclick="handleLogin()">Login Securely</button>
+            <button class="btn btn-dark" onclick="showSection('reg-section')">Create New Account</button>
+            <div style="text-align:center; margin: 20px 0; color: var(--text-muted); font-size: 12px;">OR</div>
+            <button type="button" class="btn btn-google" id="google-login-btn">
+                <img src="https://developers.google.com/identity/images/g-logo.png" width="18" alt="G"> Sign in with Google
+            </button>
+        </div>
+
+        <div class="auth-container section" id="reg-section">
+            <div class="header-title">
+                <h2>BECOME A MEMBER</h2>
+                <p>Register your portal access</p>
             </div>
-            <div class="input-group">
-                <label>Profile Photo</label>
-                <input type="file" id="photo-input" accept="image/*" onchange="previewImage(this)">
-                <img id="app-preview" src="" alt="preview">
-            </div>
-            <button type="submit" class="btn btn-green">Submit Application</button>
-        </form>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('members-dash')">Cancel</button>
+            <div class="input-group"><label>Choose Username</label><input type="text" id="new-u"></div>
+            <div class="input-group"><label>Create Password</label><input type="password" id="new-p"></div>
+            <button class="btn btn-green" onclick="handleRegister()">Register Account</button>
+            <button class="btn btn-dark" onclick="showSection('login-section')">Back to Login</button>
+        </div>
+
     </div>
 
-    <div class="container section" id="members-dash" style="max-width: 800px;">
-        <div class="header"><h2>TEAM MEMBERS</h2></div>
-        <button class="btn btn-green" onclick="show('form-section')">+ JOIN FXG TEAM</button>
-        <div id="approved-list"></div>
-        <button class="btn" style="margin-top:20px; background:#2a2e39; color:white;" onclick="show('login-section')">Logout</button>
+    <div class="dash-container section" id="form-section">
+        <div class="auth-container" style="margin: 0 auto; max-width: 600px;">
+            <div class="header-title">
+                <h2>FXG APPLICATION</h2>
+                <p>Submit your details to the Owner</p>
+            </div>
+            <form id="app-form">
+                <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
+                <input type="hidden" name="subject" value="New FXG Team Application!">
+                
+                <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
+                <div class="row">
+                    <div class="input-group" style="flex:1"><label>Age</label><input type="number" name="age" id="app-age" required></div>
+                    <div class="input-group" style="flex:1"><label>Exp (Yrs)</label><input type="number" name="exp" id="app-exp" required></div>
+                </div>
+                <div class="input-group"><label>Instagram ID</label><input type="text" name="insta" id="app-insta" required placeholder="@username"></div>
+                <div class="input-group">
+                    <label>Target Role</label>
+                    <select name="role" id="app-role">
+                        <option value="Owner">Owner</option>
+                        <option value="CEO">CEO</option>
+                        <option value="Normal Member">Normal Member</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Professional Headshot (Photo)</label>
+                    <input type="file" id="photo-input" accept="image/*" onchange="previewImage(this)">
+                    <img id="app-preview" src="" alt="preview">
+                </div>
+                <button type="submit" class="btn btn-green">Submit to Owner</button>
+            </form>
+            <button class="btn btn-dark" onclick="showSection('members-dash', true)">Cancel</button>
+        </div>
     </div>
 
-    <div class="container section" id="owner-dash" style="max-width: 800px;">
-        <div class="header"><h2>OWNER DASHBOARD (fxg.saurav)</h2></div>
-        <h3>Pending Applications</h3>
-        <div id="pending-list"></div>
-        <button class="btn" style="margin-top:20px; background:#2a2e39; color:white;" onclick="show('login-section')">Logout</button>
+    <div class="dash-container section" id="members-dash">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+            <div>
+                <h2 style="font-size: 2rem; margin-bottom: 5px;">Pro Team Roster</h2>
+                <p style="color: var(--text-muted);">Verified Elite Independent Traders</p>
+            </div>
+        </div>
+        <div class="members-grid" id="approved-list">
+            </div>
+    </div>
+
+    <div class="dash-container section" id="owner-dash">
+        <h2 style="font-size: 2rem; margin-bottom: 5px;">Owner Command Center</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">Manage pending FXG applications</p>
+        
+        <div style="background: var(--panel-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <h3 style="color: #ffb74d; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">Pending Approvals</h3>
+            <div class="admin-list" id="pending-list">
+                </div>
+        </div>
     </div>
 
     <script type="module">
@@ -102,36 +200,67 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        
         document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then(() => { show('members-dash'); renderApproved(); }).catch(console.error);
+            signInWithPopup(auth, provider).then(() => { 
+                showSection('members-dash', true); 
+                renderApproved(); 
+            }).catch(error => {
+                console.error(error);
+                alert("Google Login Failed! Note: Make sure fxg-website.vercel.app is added to Firebase Authorized Domains in settings.");
+            });
         });
     </script>
 
     <script>
-        // --- Navigation ---
-        function show(id) {
+        // --- Navigation Logic ---
+        function showSection(id, isLoggedIn = false) {
+            // Hide everything first
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
+            
+            // Toggle Layout Wrappers
+            if (isLoggedIn) {
+                document.getElementById('auth-wrapper').style.display = 'none';
+                document.getElementById('main-nav').style.display = 'flex';
+                document.getElementById(id).style.display = 'block';
+                
+                // Hide "Join" button in navbar if admin is logged in
+                const joinBtn = document.getElementById('nav-join-btn');
+                if(id === 'owner-dash') { joinBtn.style.display = 'none'; } 
+                else { joinBtn.style.display = 'inline-block'; }
+
+            } else {
+                document.getElementById('auth-wrapper').style.display = 'flex';
+                document.getElementById('main-nav').style.display = 'none';
+                document.getElementById(id).style.display = 'block';
+            }
+        }
+
+        function logout() {
+            document.getElementById('log-u').value = '';
+            document.getElementById('log-p').value = '';
+            showSection('login-section', false);
         }
 
         // --- Auth ---
         function handleRegister() {
             const u = document.getElementById('new-u').value;
             const p = document.getElementById('new-p').value;
+            if(!u || !p) return alert("Enter both username and password");
             localStorage.setItem('user_' + u, p);
-            alert("Account Registered!"); show('login-section');
+            alert("Account Registered! Please login."); showSection('login-section', false);
         }
 
         function handleLogin() {
             const u = document.getElementById('log-u').value;
             const p = document.getElementById('log-p').value;
-            if(u === 'fxg.saurav' && p === 'Xauusd@123') { show('owner-dash'); renderPending(); }
-            else if(localStorage.getItem('user_' + u) === p) { show('members-dash'); renderApproved(); }
+            if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderPending(); }
+            else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
             else alert("Invalid Credentials!");
         }
 
         // --- Photo Conversion ---
-        let base64Photo = "https://via.placeholder.com/80/131722/26a69a?text=FXG"; // Default image
+        let base64Photo = "https://via.placeholder.com/150/151924/00E676?text=FXG"; 
         function previewImage(input) {
             const file = input.files[0];
             if(file) {
@@ -150,8 +279,9 @@
         const form = document.getElementById('app-form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // 1. Save to Dashboard
+            const btn = form.querySelector('button[type="submit"]');
+            btn.innerText = "Sending..."; btn.disabled = true;
+
             const data = {
                 name: document.getElementById('app-name').value,
                 age: document.getElementById('app-age').value,
@@ -162,59 +292,67 @@
             };
             localStorage.setItem('app_' + data.name, JSON.stringify(data));
             
-            // 2. Send Email via Web3Forms
-            fetch("https://api.web3forms.com/submit", { 
-                method: "POST", 
-                body: new FormData(form) 
-            }).then(() => {
+            fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
+            .then(() => {
                 alert("Application Submitted! Sent to Owner for Approval.");
-                show('members-dash');
+                showSection('members-dash', true);
+                renderApproved();
                 form.reset();
                 document.getElementById('app-preview').style.display = 'none';
+                btn.innerText = "Submit to Owner"; btn.disabled = false;
+            }).catch(() => {
+                alert("Saved locally, but Email failed.");
+                btn.innerText = "Submit to Owner"; btn.disabled = false;
             });
         });
 
         // --- Admin Dashboard ---
         function renderPending() {
             const list = document.getElementById('pending-list'); list.innerHTML = "";
+            let hasPending = false;
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('app_')) {
+                    hasPending = true;
                     let d = JSON.parse(localStorage.getItem(key));
                     list.innerHTML += `<div class="admin-card">
-                        <div><strong>${d.name}</strong><br><span style="color:var(--accent)">${d.role}</span></div> 
-                        <button onclick="approve('${key}')" class="btn btn-green" style="width: auto; margin-top:0;">Approve</button>
+                        <div class="admin-info"><strong>${d.name}</strong><span>Role: ${d.role} | Exp: ${d.exp} Yrs</span></div> 
+                        <button onclick="approve('${key}')" class="btn btn-green" style="width: 120px; margin:0;">Approve</button>
                     </div>`;
                 }
             }
+            if(!hasPending) list.innerHTML = "<p style='color:#8c93a1'>No pending applications at the moment.</p>";
         }
 
         function approve(key) {
             let d = JSON.parse(localStorage.getItem(key));
             localStorage.setItem('member_' + d.name, JSON.stringify(d));
             localStorage.removeItem(key);
-            alert("Member Approved! Live on Dashboard.");
             renderPending();
         }
 
         // --- Members View ---
         function renderApproved() {
             const list = document.getElementById('approved-list'); list.innerHTML = "";
+            let hasMembers = false;
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('member_')) {
+                    hasMembers = true;
                     let d = JSON.parse(localStorage.getItem(key));
                     list.innerHTML += `
                         <div class="member-card">
                             <img src="${d.photo}" class="member-avatar">
-                            <div>
-                                <h3>${d.name}</h3>
-                                <p style="color:var(--accent); font-weight:bold; margin-top:3px;">${d.role}</p>
-                                <p style="font-size:12px; color:#8c93a1; margin-top:5px;">Exp: ${d.exp} Yrs | IG: @${d.insta}</p>
+                            <h3>${d.name}</h3>
+                            <div class="member-role">${d.role}</div>
+                            <div class="member-details">
+                                <span>🏆 ${d.exp} Yrs</span>
+                                <span>📱 @${d.insta}</span>
                             </div>
                         </div>`;
                 }
             }
+            if(!hasMembers) list.innerHTML = "<p style='color:#8c93a1; grid-column: 1 / -1; text-align:center; padding: 40px;'>No verified members yet. Be the first to join!</p>";
         }
     </script>
 </body>
