@@ -15,24 +15,23 @@
         .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .section { display: none; }
         .admin-card { background: #1e222d; padding: 15px; margin-top: 10px; border-radius: 6px; border: 1px solid #2a2e39; }
-        .tab-btn { padding: 10px; background: #2a2e39; color: white; border: none; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <div class="container section" id="login-section" style="display: block;">
-        <div class="header"><h2>FXG PORTAL</h2></div>
+        <div class="header"><h2>FXG PORTAL LOGIN</h2></div>
         <input type="text" id="log-u" placeholder="Username">
         <input type="password" id="log-p" placeholder="Password">
         <button class="btn btn-green" onclick="handleLogin()">Login</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register Account</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register New Account</button>
         <button type="button" class="btn btn-google" id="google-login-btn">Sign in with Google</button>
     </div>
 
     <div class="container section" id="reg-section">
-        <div class="header"><h2>REGISTER MEMBER</h2></div>
-        <input type="text" id="new-u" placeholder="Choose Username">
-        <input type="password" id="new-p" placeholder="Set Password">
+        <div class="header"><h2>REGISTER</h2></div>
+        <input type="text" id="new-u" placeholder="Username">
+        <input type="password" id="new-p" placeholder="Password">
         <button class="btn btn-green" onclick="handleRegister()">Register & Save</button>
         <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
     </div>
@@ -45,12 +44,12 @@
             <option value="SMC Specialist">SMC Specialist</option>
             <option value="Independent Trader">Independent Trader</option>
         </select>
-        <button class="btn btn-green" onclick="alert('Application Sent!')">Submit Application</button>
+        <button class="btn btn-green" onclick="alert('Application Sent to Dashboard!')">Submit Application</button>
     </div>
 
     <div class="container section" id="dash-section" style="max-width: 800px;">
         <div class="header"><h2>OWNER DASHBOARD</h2></div>
-        <button class="tab-btn" onclick="loadUsers()">Show Members</button>
+        <button class="btn" style="background:#26a69a" onclick="loadUsers()">Load Members List</button>
         <div id="user-list"></div>
         <button class="btn" style="background:#2a2e39; color:white; margin-top:20px;" onclick="show('login-section')">Logout</button>
     </div>
@@ -73,7 +72,12 @@
         const provider = new GoogleAuthProvider();
 
         document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then(() => show('form-section'));
+            signInWithPopup(auth, provider)
+                .then(() => {
+                    alert("Google Login Successful!");
+                    show('form-section');
+                })
+                .catch((error) => console.error(error));
         });
     </script>
 
@@ -86,9 +90,11 @@
         function handleRegister() {
             const u = document.getElementById('new-u').value;
             const p = document.getElementById('new-p').value;
-            localStorage.setItem('user_' + u, p);
-            alert("Account created!");
-            show('login-section');
+            if(u && p) {
+                localStorage.setItem('user_' + u, p);
+                alert("Account created!");
+                show('login-section');
+            } else { alert("Enter details!"); }
         }
 
         function handleLogin() {
