@@ -45,14 +45,20 @@
         .member-card img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 2px solid #26a69a; }
         .member-card h3 { color: #fff; font-size: 18px; }
         .member-card p { color: #8c93a1; font-size: 13px; margin-top: 5px; }
-        .table-wrapper { overflow-x: auto; margin-top: 20px; }
+        
+        /* DASHBOARD TABLES & TABS */
+        .dashboard-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background-color: #1e222d; color: #8c93a1; cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s; font-size: 14px; border: 1px solid #2a2e39; }
+        .tab-btn.active { background-color: #26a69a; color: #ffffff; border-color: #26a69a; }
+        
+        .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 15px; border-bottom: 1px solid #2a2e39; font-size: 14px; }
         th { color: #8c93a1; text-transform: uppercase; font-size: 12px; }
         .action-btn { padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; margin-right: 5px; }
         
-        /* SECTIONS - Hidden by default except login */
-        #members-section, #form-section, #dashboard-section { display: none; }
+        /* SECTIONS - Hidden by default */
+        #members-section, #form-section, #dashboard-section, #team-data-view { display: none; }
     </style>
 </head>
 <body>
@@ -126,7 +132,6 @@
                 <label>Instagram Username</label>
                 <input type="text" placeholder="@username" required>
             </div>
-            
             <div class="input-group">
                 <label>Role in Fxg Team</label>
                 <select id="user-role" required>
@@ -139,7 +144,6 @@
                     <option value="Normal Member">Normal Member</option>
                 </select>
             </div>
-            
             <div class="input-group">
                 <label>Profile Photo</label>
                 <input type="file" accept="image/*" required>
@@ -151,35 +155,70 @@
 
     <div class="container dashboard-container" id="dashboard-section">
         <div class="header" style="text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2>FXG OWNER DASHBOARD</h2>
+            <h2>OWNER DASHBOARD</h2>
             <button onclick="showSection('login-section')" class="action-btn" style="background-color: #2a2e39;">Logout</button>
         </div>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Exp</th>
-                        <th>Role</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><img src="https://via.placeholder.com/40" style="border-radius: 50%;"></td>
-                        <td>New Applicant</td>
-                        <td>20</td>
-                        <td>2 Yrs</td>
-                        <td>SMC Specialist</td>
-                        <td>
-                            <button class="action-btn btn-green">Approve</button>
-                            <button class="action-btn btn-red">Reject</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" id="tab-pending" onclick="switchAdminView('pending')">Pending Forms</button>
+            <button class="tab-btn" id="tab-members" onclick="switchAdminView('members')">Fxg Team Data</button>
+        </div>
+
+        <div id="pending-forms-view" style="display: block;">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Exp</th>
+                            <th>Applied Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/40" style="border-radius: 50%;"></td>
+                            <td>New Applicant</td>
+                            <td>2 Yrs</td>
+                            <td>Independent Trader</td>
+                            <td>
+                                <button class="action-btn btn-green">Approve</button>
+                                <button class="action-btn btn-red">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="team-data-view">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Assigned Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/40/131722/26a69a?text=V" style="border-radius: 50%;"></td>
+                            <td>Vikas</td>
+                            <td>SMC Specialist</td>
+                            <td style="color: #26a69a; font-weight: bold;">Active</td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/40/131722/26a69a?text=A" style="border-radius: 50%;"></td>
+                            <td>Aman</td>
+                            <td>Lead Analyst</td>
+                            <td style="color: #26a69a; font-weight: bold;">Active</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -192,14 +231,31 @@
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Manual Login (For Admin)
+        // Logic for Admin Dashboard Tabs
+        function switchAdminView(view) {
+            if(view === 'pending') {
+                document.getElementById('pending-forms-view').style.display = 'block';
+                document.getElementById('team-data-view').style.display = 'none';
+                document.getElementById('tab-pending').classList.add('active');
+                document.getElementById('tab-members').classList.remove('active');
+            } else {
+                document.getElementById('pending-forms-view').style.display = 'none';
+                document.getElementById('team-data-view').style.display = 'block';
+                document.getElementById('tab-pending').classList.remove('active');
+                document.getElementById('tab-members').classList.add('active');
+            }
+        }
+
+        // Admin Login with NEW Password
         document.getElementById('manual-login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('login-username').value;
             const pass = document.getElementById('login-password').value;
             
-            if(username === 'fxg.saurav' && pass === '1234') { // Change password as needed
+            // Checking exact username and new password
+            if(username === 'fxg.saurav' && pass === 'Xauusd@123') { 
                 showSection('dashboard-section');
+                switchAdminView('pending'); // Always open "Pending Forms" first
                 document.getElementById('error-msg').style.display = 'none';
                 document.getElementById('manual-login-form').reset();
             } else {
@@ -238,12 +294,7 @@
             signInWithPopup(auth, provider)
                 .then((result) => {
                     const user = result.user;
-                    console.log("Logged in user:", user);
-                    
-                    // Show user's actual Google Name on the portal!
                     document.getElementById('user-greeting').innerText = "Welcome, " + user.displayName + "!";
-                    
-                    // Send them to the members section
                     showSection('members-section');
                 }).catch((error) => {
                     console.error("Error logging in:", error);
