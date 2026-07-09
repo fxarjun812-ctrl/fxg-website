@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Hub</title>
     <style>
-        /* FXG ULTIMATE V8 DESIGN SYSTEM - SPLIT SCREEN CEO EDITION */
+        /* FXG ULTIMATE DESIGN SYSTEM - PREMIUM EDITION */
         :root { 
             --primary: #00E676; 
             --primary-hover: #00c765;
@@ -91,15 +91,15 @@
         .stat-icon.team { background: rgba(0, 230, 118, 0.1); color: var(--primary); border: 1px solid rgba(0, 230, 118, 0.2); }
         .stat-icon.pending { background: rgba(255, 170, 0, 0.1); color: var(--warning); border: 1px solid rgba(255, 170, 0, 0.2); }
 
-        /* NEW: ADMIN SPLIT LAYOUT (SIDE-BY-SIDE) */
+        /* ADMIN SPLIT LAYOUT (SIDE-BY-SIDE) */
         .admin-split-layout {
             display: grid;
-            grid-template-columns: 380px 1fr; /* Left side 380px, Right side takes remaining space */
+            grid-template-columns: 400px 1fr;
             gap: 30px;
             align-items: start;
         }
         @media (max-width: 1024px) {
-            .admin-split-layout { grid-template-columns: 1fr; /* Stacks on smaller screens */ }
+            .admin-split-layout { grid-template-columns: 1fr; }
         }
 
         /* OWNER DASHBOARD SECTIONS */
@@ -128,7 +128,7 @@
         .btn-solid-green { background: var(--primary); border: none; color: #000; box-shadow: 0 0 10px rgba(0,230,118,0.3); }
         .btn-solid-green:hover { background: var(--primary-hover); box-shadow: 0 0 15px rgba(0,230,118,0.6); }
 
-        /* MEMBERS GRID (RIGHT COLUMN ACTIVE TEAM) */
+        /* MEMBERS GRID (RIGHT COLUMN & NORMAL DASHBOARD) */
         .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .member-card { background: rgba(5, 7, 10, 0.6); border-radius: 14px; padding: 25px 20px; border: 1px solid var(--border-color); text-align: center; position: relative; overflow: hidden; transition: 0.3s; }
         .member-card:hover { transform: translateY(-5px); border-color: rgba(0, 230, 118, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -238,11 +238,13 @@
         </div>
     </div>
 
-    <!-- MEMBERS VIEW (NORMAL USER) -->
+    <!-- MEMBERS VIEW (NORMAL USER DASHBOARD) -->
     <div class="dash-container section" id="members-dash">
-        <h2 style="font-size: 2.2rem; margin-bottom: 5px;">Pro Team Roster</h2>
-        <p style="color: var(--text-muted); margin-bottom: 25px;">Verified Elite Independent Traders of FXG</p>
-        <div class="members-grid" id="approved-list"></div>
+        <div class="owner-section-box success-glow" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+            <h2 style="font-size: 2.2rem; margin-bottom: 5px; color: #fff;">Pro Team Roster</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">Verified Elite Independent Traders of FXG</p>
+            <div class="members-grid" id="approved-list"></div>
+        </div>
     </div>
 
     <!-- OWNER DASHBOARD (CEO COMMAND CENTER) -->
@@ -299,180 +301,4 @@
             </div>
             <div class="modal-body">
                 <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" id="modal-prof" style="color:var(--warning);"></span></div>
-                <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value" id="modal-email"></span></div>
-                <div class="detail-row"><span class="detail-label">Instagram</span><span class="detail-value" id="modal-insta"></span></div>
-                <div class="detail-row"><span class="detail-label">Experience</span><span class="detail-value" id="modal-exp"></span></div>
-                <div class="detail-row"><span class="detail-label">Age</span><span class="detail-value" id="modal-age"></span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FIREBASE -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        const firebaseConfig = { apiKey: "AIzaSyDyfmvDid1o1-rzplifEE0R7X5lvv7gzFI", authDomain: "fxg-portal.firebaseapp.com", projectId: "fxg-portal", storageBucket: "fxg-portal.firebasestorage.app", messagingSenderId: "702222367751", appId: "1:702222367751:web:70a5dcbbcf5fb1465c7ea2" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then(() => { showSection('members-dash', true); renderApproved(); }).catch(console.error);
-        });
-    </script>
-
-    <!-- CORE LOGIC -->
-    <script>
-        function showSection(id, isLoggedIn = false) {
-            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            if (isLoggedIn) {
-                document.getElementById('auth-wrapper').style.display = 'none';
-                document.getElementById('main-nav').style.display = 'flex';
-                document.getElementById(id).style.display = 'block';
-                const joinBtn = document.getElementById('nav-join-btn');
-                if(id === 'owner-dash') { joinBtn.style.display = 'none'; } else { joinBtn.style.display = 'inline-block'; }
-            } else {
-                document.getElementById('auth-wrapper').style.display = 'flex';
-                document.getElementById('main-nav').style.display = 'none';
-                document.getElementById(id).style.display = 'block';
-            }
-        }
-
-        function logout() { document.getElementById('log-u').value = ''; document.getElementById('log-p').value = ''; showSection('login-section', false); }
-        function handleRegister() { const u = document.getElementById('new-u').value; const p = document.getElementById('new-p').value; localStorage.setItem('user_' + u, p); alert("Registered!"); showSection('login-section', false); }
-        
-        function handleLogin() {
-            const u = document.getElementById('log-u').value; const p = document.getElementById('log-p').value;
-            if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderDashboardStats(); }
-            else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
-            else alert("Invalid Credentials!");
-        }
-
-        let base64Photo = "https://via.placeholder.com/150/0f1219/00E676?text=FXG"; 
-        function previewImage(input) {
-            const file = input.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) { base64Photo = e.target.result; const prev = document.getElementById('app-preview'); prev.src = base64Photo; prev.style.display = 'block'; }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        const form = document.getElementById('app-form');
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = form.querySelector('button[type="submit"]'); btn.innerText = "Sending..."; btn.disabled = true;
-
-            const data = {
-                name: document.getElementById('app-name').value, email: document.getElementById('app-email').value,
-                age: document.getElementById('app-age').value, exp: document.getElementById('app-exp').value,
-                prof: document.getElementById('app-prof').value, insta: document.getElementById('app-insta').value,
-                role: document.getElementById('app-role').value, photo: base64Photo
-            };
-            localStorage.setItem('app_' + data.name, JSON.stringify(data));
-            
-            fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
-            .then(() => {
-                alert("Application Sent to Admin!"); showSection('members-dash', true); renderApproved(); form.reset();
-                document.getElementById('app-preview').style.display = 'none'; btn.innerText = "Submit to Owner"; btn.disabled = false;
-            });
-        });
-
-        function renderDashboardStats() {
-            renderPending();
-            renderApproved();
-        }
-
-        function renderPending() {
-            const list = document.getElementById('pending-list'); list.innerHTML = "";
-            let count = 0;
-            for(let i=0; i<localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if(key.startsWith('app_')) {
-                    count++;
-                    let d = JSON.parse(localStorage.getItem(key));
-                    list.innerHTML += `
-                    <div class="admin-card">
-                        <div class="admin-info">
-                            <div class="admin-icon-wait">⏳</div>
-                            <div class="admin-details">
-                                <strong>${d.name}</strong>
-                                <span><span class="badge">${d.role}</span> Exp: ${d.exp} Yrs</span>
-                            </div>
-                        </div> 
-                        <div class="admin-actions">
-                            <button onclick="openModal('${key}')" class="btn-sm btn-outline">View Details</button>
-                            <button onclick="approve('${key}')" class="btn-sm btn-solid-green">Approve</button>
-                        </div>
-                    </div>`;
-                }
-            }
-            document.getElementById('stat-pending').innerText = count;
-            if(count === 0) list.innerHTML = "<div class='empty-state'>No pending applications. Inbox is clean!</div>";
-        }
-
-        function approve(key) { 
-            let d = JSON.parse(localStorage.getItem(key)); 
-            localStorage.setItem('member_' + d.name, JSON.stringify(d)); 
-            localStorage.removeItem(key); 
-            renderDashboardStats();
-        }
-
-        function kickMember(key) {
-            if(confirm("WARNING: Are you sure you want to remove this member from the FXG Pro Team?")) {
-                localStorage.removeItem(key);
-                renderDashboardStats();
-            }
-        }
-
-        function renderApproved() {
-            const list1 = document.getElementById('approved-list'); // Users
-            const list2 = document.getElementById('owner-approved-list'); // Admin
-            let html1 = ""; let html2 = ""; let count = 0;
-
-            for(let i=0; i<localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if(key.startsWith('member_')) {
-                    count++;
-                    let d = JSON.parse(localStorage.getItem(key));
-                    let profStatus = d.prof ? d.prof : "Trader"; 
-                    
-                    let cardBase = `
-                        <img src="${d.photo}" class="member-avatar">
-                        <h3>${d.name}</h3>
-                        <div class="member-role">${d.role}</div>
-                        <span class="member-prof">• ${profStatus}</span>
-                        <div class="member-details"><span>🏆 ${d.exp} Yrs</span><span>📱 @${d.insta}</span></div>
-                    `;
-
-                    html1 += `<div class="member-card">${cardBase}</div>`;
-                    html2 += `
-                        <div class="member-card">
-                            ${cardBase}
-                            <button onclick="kickMember('${key}')" class="btn-red" style="margin-top:20px; width:100%;">Remove Member</button>
-                        </div>`;
-                }
-            }
-            
-            if(document.getElementById('stat-active')) document.getElementById('stat-active').innerText = count;
-            
-            if(count === 0) {
-                let msg = "<div class='empty-state' style='grid-column:1/-1;'>No active members in the roster yet.</div>";
-                html1 = msg; html2 = msg;
-            }
-            
-            if(list1) list1.innerHTML = html1;
-            if(list2) list2.innerHTML = html2;
-        }
-
-        function openModal(key) {
-            let d = JSON.parse(localStorage.getItem(key));
-            document.getElementById('modal-photo').src = d.photo; document.getElementById('modal-name').innerText = d.name;
-            document.getElementById('modal-role').innerText = d.role; document.getElementById('modal-prof').innerText = d.prof || "N/A";
-            document.getElementById('modal-email').innerText = d.email || "Not Provided"; document.getElementById('modal-insta').innerText = "@" + d.insta;
-            document.getElementById('modal-exp').innerText = d.exp + " Years"; document.getElementById('modal-age').innerText = d.age + " Years";
-            document.getElementById('details-modal').style.display = 'flex';
-        }
-        function closeModal() { document.getElementById('details-modal').style.display = 'none'; }
-    </script>
-</body>
-</html>
+                <div class="detail-row"><span 
