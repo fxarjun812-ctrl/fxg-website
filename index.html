@@ -42,22 +42,29 @@
 
     <div class="container section" id="form-section">
         <div class="header"><h2>JOIN FXG TEAM</h2></div>
-        <div class="input-group"><label>Full Name</label><input type="text" id="app-name"></div>
-        <div class="row">
-            <div class="input-group" style="flex:1"><label>Age</label><input type="number" id="app-age"></div>
-            <div class="input-group" style="flex:1"><label>Exp (Years)</label><input type="number" id="app-exp"></div>
-        </div>
-        <div class="input-group"><label>Instagram Username</label><input type="text" id="app-insta"></div>
-        <div class="input-group">
-            <label>Role</label>
-            <select id="app-role">
-                <option value="Lead Analyst">Lead Analyst (XAUUSD)</option>
-                <option value="SMC Specialist">SMC Specialist</option>
-                <option value="Independent Trader">Independent Trader</option>
-            </select>
-        </div>
-        <div class="input-group"><label>Profile Photo</label><input type="file" id="app-photo" accept="image/*"></div>
-        <button class="btn btn-green" onclick="submitApplication()">Submit Application</button>
+        <form id="app-form">
+            <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
+            <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
+            <div class="row">
+                <div class="input-group" style="flex:1"><label>Age</label><input type="number" name="age" id="app-age" required></div>
+                <div class="input-group" style="flex:1"><label>Exp (Years)</label><input type="number" name="exp" id="app-exp" required></div>
+            </div>
+            <div class="input-group"><label>Instagram</label><input type="text" name="insta" id="app-insta" required></div>
+            <div class="input-group">
+                <label>Team Role</label>
+                <select name="role" id="app-role">
+                    <option value="Owner">Owner</option>
+                    <option value="CEO">CEO</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Team Leader">Team Leader</option>
+                    <option value="Lead Analyst">Lead Analyst</option>
+                    <option value="SMC Specialist">SMC Specialist</option>
+                    <option value="Independent Trader">Independent Trader</option>
+                    <option value="Normal Member">Normal Member</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-green">Submit Application</button>
+        </form>
         <button class="btn" style="background:#2a2e39; color:white;" onclick="show('members-dash')">Back</button>
     </div>
 
@@ -103,17 +110,21 @@
             else if(localStorage.getItem('user_' + u) === p) { show('members-dash'); renderApproved(); }
             else alert("Invalid Credentials!");
         }
-        function submitApplication() {
+
+        // Web3Forms Submit + LocalStorage Save
+        const form = document.getElementById('app-form');
+        form.addEventListener('submit', function(e) {
+            // Save to local storage for dashboard
             const data = {
                 name: document.getElementById('app-name').value,
-                age: document.getElementById('app-age').value,
-                exp: document.getElementById('app-exp').value,
-                insta: document.getElementById('app-insta').value,
-                role: document.getElementById('app-role').value
+                role: document.getElementById('app-role').value,
+                exp: document.getElementById('app-exp').value
             };
             localStorage.setItem('app_' + data.name, JSON.stringify(data));
-            alert("Application Sent to Owner!"); show('members-dash');
-        }
+            alert("Application Submitted! Email sent to Admin.");
+            show('members-dash');
+        });
+
         function renderPending() {
             const list = document.getElementById('pending-list'); list.innerHTML = "";
             for(let i=0; i<localStorage.length; i++) {
@@ -126,10 +137,9 @@
         }
         function approve(key) {
             let d = JSON.parse(localStorage.getItem(key));
-            d.status = 'approved';
             localStorage.setItem('member_' + d.name, JSON.stringify(d));
             localStorage.removeItem(key);
-            alert("Approved!"); renderPending();
+            alert("Member Approved!"); renderPending();
         }
         function renderApproved() {
             const list = document.getElementById('approved-list'); list.innerHTML = "";
@@ -137,7 +147,7 @@
                 let key = localStorage.key(i);
                 if(key.startsWith('member_')) {
                     let d = JSON.parse(localStorage.getItem(key));
-                    list.innerHTML += `<div class="member-card"><h3>${d.name}</h3><p>${d.role} | Exp: ${d.exp} yrs | IG: @${d.insta}</p></div>`;
+                    list.innerHTML += `<div class="member-card"><h3>${d.name}</h3><p>${d.role} | Exp: ${d.exp} yrs</p></div>`;
                 }
             }
         }
