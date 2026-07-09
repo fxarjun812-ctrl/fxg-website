@@ -9,10 +9,10 @@
         body { background: #0e1015; color: #d1d4dc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .container { background: #131722; padding: 30px; border-radius: 12px; width: 100%; max-width: 600px; border: 1px solid #2a2e39; }
         .header { text-align: center; margin-bottom: 20px; }
-        .header h2 { color: #ffffff; letter-spacing: 2px; }
         .input-group { margin-bottom: 15px; }
         label { font-size: 12px; color: #8c93a1; text-transform: uppercase; margin-bottom: 5px; display: block; }
         input, select { width: 100%; padding: 12px; background: #1e222d; border: 1px solid #2a2e39; color: white; border-radius: 6px; }
+        .row { display: flex; gap: 10px; }
         .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .btn-green { background: #26a69a; color: white; }
         .btn-google { background: #ffffff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -24,11 +24,11 @@
 <body>
 
     <div class="container section" id="login-section" style="display: block;">
-        <div class="header"><h2>FXG PORTAL</h2><p>Login to Access</p></div>
+        <div class="header"><h2>FXG PORTAL</h2></div>
         <div class="input-group"><label>Username</label><input type="text" id="log-u"></div>
         <div class="input-group"><label>Password</label><input type="password" id="log-p"></div>
         <button class="btn btn-green" onclick="handleLogin()">Login</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register New Account</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('reg-section')">Register</button>
         <button type="button" class="btn-google" id="google-login-btn">Sign in with Google</button>
     </div>
 
@@ -37,15 +37,17 @@
         <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
         <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
         <button class="btn btn-green" onclick="handleRegister()">Register & Save</button>
-        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('login-section')">Back</button>
+        <button class="btn" onclick="show('login-section')">Back</button>
     </div>
 
     <div class="container section" id="form-section">
         <div class="header"><h2>JOIN FXG TEAM</h2></div>
         <div class="input-group"><label>Full Name</label><input type="text" id="app-name"></div>
-        <div class="input-group"><label>Age</label><input type="number" id="app-age"></div>
-        <div class="input-group"><label>Exp (Years)</label><input type="number" id="app-exp"></div>
-        <div class="input-group"><label>Instagram</label><input type="text" id="app-insta"></div>
+        <div class="row">
+            <div class="input-group" style="flex:1"><label>Age</label><input type="number" id="app-age"></div>
+            <div class="input-group" style="flex:1"><label>Exp (Years)</label><input type="number" id="app-exp"></div>
+        </div>
+        <div class="input-group"><label>Instagram Username</label><input type="text" id="app-insta"></div>
         <div class="input-group">
             <label>Role</label>
             <select id="app-role">
@@ -56,7 +58,7 @@
         </div>
         <div class="input-group"><label>Profile Photo</label><input type="file" id="app-photo" accept="image/*"></div>
         <button class="btn btn-green" onclick="submitApplication()">Submit Application</button>
-        <button class="btn" onclick="show('members-dash')">Back to Members</button>
+        <button class="btn" style="background:#2a2e39; color:white;" onclick="show('members-dash')">Back</button>
     </div>
 
     <div class="container section" id="members-dash" style="max-width: 800px;">
@@ -90,12 +92,10 @@
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
             document.getElementById(id).style.display = 'block';
         }
-
         function handleRegister() {
             localStorage.setItem('user_' + document.getElementById('new-u').value, document.getElementById('new-p').value);
             alert("Account created!"); show('login-section');
         }
-
         function handleLogin() {
             const u = document.getElementById('log-u').value;
             const p = document.getElementById('log-p').value;
@@ -103,45 +103,41 @@
             else if(localStorage.getItem('user_' + u) === p) { show('members-dash'); renderApproved(); }
             else alert("Invalid Credentials!");
         }
-
         function submitApplication() {
             const data = {
                 name: document.getElementById('app-name').value,
-                role: document.getElementById('app-role').value,
+                age: document.getElementById('app-age').value,
                 exp: document.getElementById('app-exp').value,
                 insta: document.getElementById('app-insta').value,
-                status: 'pending'
+                role: document.getElementById('app-role').value
             };
             localStorage.setItem('app_' + data.name, JSON.stringify(data));
-            alert("Sent to Owner!"); show('members-dash');
+            alert("Application Sent to Owner!"); show('members-dash');
         }
-
         function renderPending() {
             const list = document.getElementById('pending-list'); list.innerHTML = "";
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('app_')) {
                     let d = JSON.parse(localStorage.getItem(key));
-                    list.innerHTML += `<div class="admin-card">${d.name} (${d.role}) <button onclick="approve('${key}')">Approve</button></div>`;
+                    list.innerHTML += `<div class="admin-card"><div>${d.name} (${d.role})</div> <button onclick="approve('${key}')">Approve</button></div>`;
                 }
             }
         }
-
         function approve(key) {
             let d = JSON.parse(localStorage.getItem(key));
             d.status = 'approved';
             localStorage.setItem('member_' + d.name, JSON.stringify(d));
             localStorage.removeItem(key);
-            alert("Member Approved!"); renderPending();
+            alert("Approved!"); renderPending();
         }
-
         function renderApproved() {
             const list = document.getElementById('approved-list'); list.innerHTML = "";
             for(let i=0; i<localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if(key.startsWith('member_')) {
                     let d = JSON.parse(localStorage.getItem(key));
-                    list.innerHTML += `<div class="member-card"><h3>${d.name}</h3><p>${d.role} | Exp: ${d.exp} | IG: ${d.insta}</p></div>`;
+                    list.innerHTML += `<div class="member-card"><h3>${d.name}</h3><p>${d.role} | Exp: ${d.exp} yrs | IG: @${d.insta}</p></div>`;
                 }
             }
         }
