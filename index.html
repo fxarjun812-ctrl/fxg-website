@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG FINAL V20 - EXACT V19 DESIGN + DROPDOWN & PHOTO FIXES */
+        /* FXG FINAL V21 - AESTHETIC POLISH + EMPTY STATE FIX */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
@@ -82,11 +82,21 @@
         .btn-google { background: #fff; color: #000; margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-google:hover { background: #f0f0f0; }
 
-        /* MAIN APP LAYOUT (PURE DASHBOARD) */
+        /* MAIN APP LAYOUT */
         .dash-container { display: none; padding: 50px 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .section-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;}
-        .section-header h2 { font-size: 2.2rem; font-weight: 700; color: #fff; letter-spacing: -1px; margin-bottom: 5px;}
-        .section-header p { color: var(--text-muted); font-size: 1rem; }
+        
+        /* UPDATED SECTION HEADER GRADIENT */
+        .section-header h2 { 
+            font-size: 2.4rem; 
+            font-weight: 800; 
+            letter-spacing: -1px; 
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #ffffff, var(--accent-2));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .section-header p { color: var(--text-muted); font-size: 1.05rem; }
 
         /* ==========================================
            GEMINI SLIDER (OFFCANVAS SIDEBAR)
@@ -134,7 +144,7 @@
         .btn-accent { background: rgba(0, 198, 255, 0.1); color: var(--accent-2); border: 1px solid rgba(0, 198, 255, 0.3); }
         .btn-accent:hover { background: rgba(0, 198, 255, 0.2); }
 
-        /* UNIFIED MEMBERS GRID (ONLY TRADERS MAIN VIEW) */
+        /* GRID (MAIN AREA) */
         .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .member-card { background: var(--bg-card); border-radius: 14px; padding: 35px 20px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative;}
         .member-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
@@ -172,7 +182,24 @@
         /* FIXED AUTO-ADJUST PHOTO STYLING */
         #app-preview { width: 85px; height: 85px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; object-position: center; border: 2px solid var(--accent-2); box-shadow: 0 0 10px rgba(0, 198, 255, 0.2); }
         .section { display: none; }
-        .empty-state { text-align: center; color: var(--text-muted); padding: 40px; font-size: 0.9rem; background: transparent; border-radius: 10px; border: 1px dashed var(--border-color); width:100%; grid-column:1/-1;}
+        
+        /* NEW PREMIUM EMPTY STATE */
+        .empty-state { 
+            text-align: center; 
+            padding: 60px 40px; 
+            background: linear-gradient(145deg, rgba(0, 114, 255, 0.03), rgba(0, 198, 255, 0.02)); 
+            border-radius: 16px; 
+            border: 1px dashed var(--border-highlight); 
+            width: 100%; 
+            grid-column: 1/-1;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+        .empty-state-icon { font-size: 3.5rem; margin-bottom: 15px; opacity: 0.8; filter: drop-shadow(0 0 15px rgba(0, 198, 255, 0.4)); }
+        .empty-state h3 { color: #fff; font-size: 1.3rem; margin-bottom: 8px; font-weight: 700; }
+        .empty-state p { color: var(--text-muted); font-size: 0.95rem; }
+        
+        /* ADMIN SLIDER EMPTY STATE */
+        .slider-empty { text-align: center; color: var(--text-muted); padding: 40px; font-size: 0.9rem; background: transparent; border-radius: 10px; border: 1px dashed var(--border-color); width:100%; }
     </style>
 </head>
 <body>
@@ -261,7 +288,6 @@
                 
                 <div class="input-group"><label>Instagram ID</label><input type="text" name="insta" id="app-insta" required placeholder="@username"></div>
                 
-                <!-- UPDATED TRADING PHASES -->
                 <div class="input-group">
                     <label>Current Trading Status</label>
                     <select name="profitable" id="app-prof">
@@ -301,7 +327,8 @@
                 <h2>Pro Team Roster</h2>
                 <p>Official Trading Roster of FXG</p>
             </div>
-            <button class="btn btn-primary" style="width:max-content; flex:none; padding: 12px 24px; font-size: 0.9rem;" onclick="showSection('form-section', true)">Submit KYC Profile</button>
+            <!-- BUTTON TEXT UPDATED -->
+            <button class="btn btn-primary" style="width:max-content; flex:none; padding: 12px 24px; font-size: 0.95rem; font-weight:700;" onclick="showSection('form-section', true)">+ Join FXG Team</button>
         </div>
         <div class="members-grid" id="approved-list"></div>
     </div>
@@ -313,7 +340,6 @@
                 <h2>Verified Traders Roster</h2>
                 <p>Manage your elite trading network.</p>
             </div>
-            <!-- BUTTON TO OPEN GEMINI SLIDER -->
             <button class="btn-sm btn-outline" style="width:max-content; flex:none; padding: 12px 20px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;" onclick="toggleSlider()">
                 ☰ Manage Console 
                 <span class="badge-count" id="header-badge" style="margin-left:5px;">0</span>
@@ -321,9 +347,7 @@
         </div>
         
         <!-- TRADERS GRID -->
-        <div class="members-grid" id="owner-approved-list">
-            <!-- Active members inject here -->
-        </div>
+        <div class="members-grid" id="owner-approved-list"></div>
     </div>
 
     <!-- POPUP MODAL -->
@@ -468,7 +492,7 @@
                 if(count > 0) headerBadge.classList.add('show'); else headerBadge.classList.remove('show');
             }
             
-            if(count === 0) list.innerHTML = "<div class='empty-state' style='background:transparent; border:none; padding:10px;'>Queue is clear!</div>";
+            if(count === 0) list.innerHTML = "<div class='slider-empty'>Queue is clear!</div>";
         }
 
         function approve(key) { 
@@ -497,12 +521,11 @@
                     let d = JSON.parse(localStorage.getItem(key));
                     let profStatus = d.prof ? d.prof : "Profitable"; 
                     
-                    // NEW DYNAMIC STATUS COLOR LOGIC
-                    let statusClass = "status-eval"; // default warning color
-                    if(profStatus === "Profitable") statusClass = "status-funded"; // blue color
-                    else if(profStatus === "Losing Phase") statusClass = "status-danger"; // red color
-                    else if(profStatus === "Break Even Phase") statusClass = "status-eval"; // yellow color
-                    else statusClass = "status-eval"; // default yellow color for Learning Phase
+                    let statusClass = "status-eval"; 
+                    if(profStatus === "Profitable") statusClass = "status-funded"; 
+                    else if(profStatus === "Losing Phase") statusClass = "status-danger"; 
+                    else if(profStatus === "Break Even Phase") statusClass = "status-eval"; 
+                    else statusClass = "status-eval"; 
 
                     let encodedName = encodeURIComponent(d.name);
                     let safeImage = d.photo || `https://ui-avatars.com/api/?name=${encodedName}&background=0D1117&color=00C6FF`;
@@ -533,9 +556,17 @@
             
             if(document.getElementById('stat-active')) document.getElementById('stat-active').innerText = count;
             
+            // NEW PREMIUM EMPTY STATE
+            let emptyMsg = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🌌</div>
+                    <h3>The Roster is Empty</h3>
+                    <p>No active traders in the network yet. Be the first to join the elite team!</p>
+                </div>
+            `;
+
             if(count === 0) {
-                let msg = "<div class='empty-state'>No active traders in the network yet.</div>";
-                html1 = msg; html2 = msg;
+                html1 = emptyMsg; html2 = emptyMsg;
             }
             
             if(list1) list1.innerHTML = html1;
