@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG FINAL V19 - PURE ROSTER DASHBOARD + GEMINI SLIDER */
+        /* FXG FINAL V20 - EXACT V19 DESIGN + DROPDOWN & PHOTO FIXES */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
@@ -148,6 +148,7 @@
         .pill.role { color: #fff; border-color: var(--border-color); background: var(--bg-input);}
         .pill.status-funded { color: var(--accent-2); border-color: rgba(0, 198, 255, 0.3); background: rgba(0, 198, 255, 0.05); }
         .pill.status-eval { color: var(--warning); border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.05); }
+        .pill.status-danger { color: var(--danger); border-color: rgba(255, 77, 77, 0.3); background: rgba(255, 77, 77, 0.05); }
 
         .member-footer { display: flex; justify-content: center; gap: 18px; color: var(--text-muted); font-size: 0.8rem; background: var(--bg-input); padding: 12px; border-radius: 8px;}
         .member-footer span { display: flex; align-items: center; gap: 6px; font-weight: 500;}
@@ -168,15 +169,18 @@
         .modal-body .detail-label { color: var(--text-muted); font-size: 0.85rem; }
         .modal-body .detail-value { font-weight: 600; font-size: 0.95rem; color: #fff;}
 
-        #app-preview { width: 80px; height: 80px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; border: 1px solid var(--border-color); }
+        /* FIXED AUTO-ADJUST PHOTO STYLING */
+        #app-preview { width: 85px; height: 85px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; object-position: center; border: 2px solid var(--accent-2); box-shadow: 0 0 10px rgba(0, 198, 255, 0.2); }
         .section { display: none; }
         .empty-state { text-align: center; color: var(--text-muted); padding: 40px; font-size: 0.9rem; background: transparent; border-radius: 10px; border: 1px dashed var(--border-color); width:100%; grid-column:1/-1;}
     </style>
 </head>
 <body>
 
+    <!-- OVERLAY FOR SLIDER -->
     <div class="slider-overlay" id="slider-overlay" onclick="toggleSlider()"></div>
 
+    <!-- GEMINI SLIDER (OFFCANVAS) -->
     <div class="admin-slider" id="admin-slider">
         <div class="slider-header">
             <h3>Admin Console</h3>
@@ -198,9 +202,11 @@
             Requests Queue <span class="badge-count" id="slider-badge-count">0</span>
         </div>
         <div class="admin-list" id="pending-list">
-            </div>
+            <!-- Pending cards load here -->
+        </div>
     </div>
 
+    <!-- NAVBAR -->
     <nav class="app-nav" id="main-nav">
         <div class="nav-logo">
             <div class="nav-logo-text">F<span>X</span>G</div>
@@ -211,6 +217,7 @@
         </div>
     </nav>
 
+    <!-- AUTH WRAPPER -->
     <div class="auth-wrapper" id="auth-wrapper">
         <div class="brand-side">
             <div class="hero-logo">F<span>X</span>G</div>
@@ -238,6 +245,7 @@
         </div>
     </div>
 
+    <!-- APPLICATION FORM -->
     <div class="dash-container section" id="form-section">
         <div class="auth-container" style="margin: 0 auto; max-width: 550px;">
             <div class="header-title"><h2>Trader Profile</h2><p>Submit details for review</p></div>
@@ -253,12 +261,14 @@
                 
                 <div class="input-group"><label>Instagram ID</label><input type="text" name="insta" id="app-insta" required placeholder="@username"></div>
                 
+                <!-- UPDATED TRADING PHASES -->
                 <div class="input-group">
                     <label>Current Trading Status</label>
                     <select name="profitable" id="app-prof">
-                        <option value="Funded Trader">Funded Trader / Profitable</option>
-                        <option value="Evaluation Phase">Evaluation Phase</option>
                         <option value="Learning Phase">Learning Phase</option>
+                        <option value="Losing Phase">Losing Phase</option>
+                        <option value="Break Even Phase">Break Even Phase</option>
+                        <option value="Profitable">Profitable</option>
                     </select>
                 </div>
 
@@ -284,6 +294,7 @@
         </div>
     </div>
 
+    <!-- NORMAL USER DASHBOARD (CLEANED) -->
     <div class="dash-container section" id="members-dash">
         <div class="section-header">
             <div>
@@ -292,26 +303,30 @@
             </div>
             <button class="btn btn-primary" style="width:max-content; flex:none; padding: 12px 24px; font-size: 0.9rem;" onclick="showSection('form-section', true)">Submit KYC Profile</button>
         </div>
-
         <div class="members-grid" id="approved-list"></div>
     </div>
 
+    <!-- CEO ADMIN DASHBOARD (CLEANED) -->
     <div class="dash-container section" id="owner-dash">
         <div class="section-header">
             <div>
                 <h2>Verified Traders Roster</h2>
                 <p>Manage your elite trading network.</p>
             </div>
+            <!-- BUTTON TO OPEN GEMINI SLIDER -->
             <button class="btn-sm btn-outline" style="width:max-content; flex:none; padding: 12px 20px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;" onclick="toggleSlider()">
                 ☰ Manage Console 
                 <span class="badge-count" id="header-badge" style="margin-left:5px;">0</span>
             </button>
         </div>
         
+        <!-- TRADERS GRID -->
         <div class="members-grid" id="owner-approved-list">
-            </div>
+            <!-- Active members inject here -->
+        </div>
     </div>
 
+    <!-- POPUP MODAL -->
     <div class="modal-overlay" id="details-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -332,6 +347,7 @@
         </div>
     </div>
 
+    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -344,6 +360,7 @@
         });
     </script>
 
+    <!-- CORE LOGIC -->
     <script>
         function toggleSlider() {
             document.getElementById('admin-slider').classList.toggle('open');
@@ -478,8 +495,14 @@
                 if(key.startsWith('member_')) {
                     count++;
                     let d = JSON.parse(localStorage.getItem(key));
-                    let profStatus = d.prof ? d.prof : "Funded Trader"; 
-                    let statusClass = profStatus.includes("Funded") || profStatus.includes("Profitable") ? "status-funded" : "status-eval";
+                    let profStatus = d.prof ? d.prof : "Profitable"; 
+                    
+                    // NEW DYNAMIC STATUS COLOR LOGIC
+                    let statusClass = "status-eval"; // default warning color
+                    if(profStatus === "Profitable") statusClass = "status-funded"; // blue color
+                    else if(profStatus === "Losing Phase") statusClass = "status-danger"; // red color
+                    else if(profStatus === "Break Even Phase") statusClass = "status-eval"; // yellow color
+                    else statusClass = "status-eval"; // default yellow color for Learning Phase
 
                     let encodedName = encodeURIComponent(d.name);
                     let safeImage = d.photo || `https://ui-avatars.com/api/?name=${encodedName}&background=0D1117&color=00C6FF`;
