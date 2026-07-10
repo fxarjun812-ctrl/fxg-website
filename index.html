@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG FINAL V22 - FULL PHOTO CARDS & CLEAN HEADERS */
+        /* FXG FINAL V25 - USER CODE WITH SESSION + PHOTO FIX + WEB3FORMS */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
@@ -130,7 +130,7 @@
         .admin-list { display: flex; flex-direction: column; gap: 15px; }
         .admin-card { background: var(--bg-main); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px; border-left: 3px solid var(--warning);}
         .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-info img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-color); }
+        .admin-info img { width: 45px; height: 45px; border-radius: 8px; object-fit: contain; background: #05070a; border: 1px solid var(--border-color); }
         .admin-details strong { font-size: 1.05rem; color: #fff; display: block; margin-bottom: 4px; font-weight: 600;}
         .admin-details span { color: var(--text-muted); font-size: 0.8rem; }
         .admin-actions { display: flex; gap: 10px; width: 100%;}
@@ -142,15 +142,15 @@
         .btn-accent:hover { background: rgba(0, 198, 255, 0.2); }
 
         /* ==========================================
-           NEW GRID: FULL PHOTO CARDS
+           NEW GRID: FULL PHOTO CARDS (CONTAIN FIXED)
            ========================================== */
         .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         .member-card { background: var(--bg-card); border-radius: 16px; padding: 15px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; overflow: hidden;}
         .member-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
-        /* BADI PHOTO WALA SECTION */
-        .member-avatar-wrap { position: relative; width: 100%; height: 220px; margin: 0 auto 15px; border-radius: 12px; overflow: hidden; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.02);}
-        .member-avatar { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: 0.3s;}
+        /* BADI PHOTO WALA SECTION (FIXED OBJECT-FIT) */
+        .member-avatar-wrap { position: relative; width: 100%; height: 220px; margin: 0 auto 15px; border-radius: 12px; overflow: hidden; background: #05070a; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;}
+        .member-avatar { width: 100%; height: 100%; object-fit: contain; transition: 0.3s;}
         .member-card:hover .member-avatar { transform: scale(1.03); }
 
         /* INTRO BELOW PHOTO */
@@ -177,7 +177,7 @@
         .close-btn:hover { color: #fff; }
         
         .modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
-        .modal-header img { width: 100%; height: 220px; border-radius: 12px; object-fit: cover; object-position: top center; border: 1px solid var(--border-color); margin-bottom: 20px; background-color: var(--bg-input);}
+        .modal-header img { width: 100%; height: 220px; border-radius: 12px; object-fit: contain; border: 1px solid var(--border-color); margin-bottom: 20px; background-color: #05070a;}
         .modal-header h3 { font-size: 1.5rem; color: #fff; margin-bottom: 8px; font-weight: 700;}
         
         .modal-body .detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
@@ -186,7 +186,7 @@
         .modal-body .detail-value { font-weight: 600; font-size: 0.95rem; color: #fff;}
 
         /* LARGE PHOTO PREVIEW FOR FORM */
-        #app-preview { width: 100%; height: 200px; border-radius: 12px; margin-top: 15px; display: none; object-fit: cover; object-position: top center; border: 1px solid var(--accent-2); box-shadow: 0 0 15px rgba(0, 198, 255, 0.15); background: var(--bg-main);}
+        #app-preview { width: 100%; height: 200px; border-radius: 12px; margin-top: 15px; display: none; object-fit: contain; border: 1px solid var(--accent-2); box-shadow: 0 0 15px rgba(0, 198, 255, 0.15); background: #05070a;}
         .section { display: none; }
         
         /* PREMIUM EMPTY STATE */
@@ -208,10 +208,8 @@
 </head>
 <body>
 
-    <!-- OVERLAY FOR SLIDER -->
     <div class="slider-overlay" id="slider-overlay" onclick="toggleSlider()"></div>
 
-    <!-- GEMINI SLIDER (OFFCANVAS) -->
     <div class="admin-slider" id="admin-slider">
         <div class="slider-header">
             <h3>Admin Console</h3>
@@ -233,11 +231,9 @@
             Requests Queue <span class="badge-count" id="slider-badge-count">0</span>
         </div>
         <div class="admin-list" id="pending-list">
-            <!-- Pending cards load here -->
-        </div>
+            </div>
     </div>
 
-    <!-- NAVBAR -->
     <nav class="app-nav" id="main-nav">
         <div class="nav-logo">
             <div class="nav-logo-text">F<span>X</span>G</div>
@@ -248,7 +244,6 @@
         </div>
     </nav>
 
-    <!-- AUTH WRAPPER -->
     <div class="auth-wrapper" id="auth-wrapper">
         <div class="brand-side">
             <div class="hero-logo">F<span>X</span>G</div>
@@ -276,12 +271,13 @@
         </div>
     </div>
 
-    <!-- APPLICATION FORM -->
     <div class="dash-container section" id="form-section">
         <div class="auth-container" style="margin: 0 auto; max-width: 550px;">
             <div class="header-title"><h2>Trader Profile</h2><p>Submit details for review</p></div>
             <form id="app-form">
-                <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
+                
+                <input type="hidden" name="access_key" value="TERI_WEB3FORMS_KEY_YAHA_DAAL">
+                
                 <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
                 <div class="input-group"><label>Email Address</label><input type="email" name="email" id="app-email" required></div>
                 
@@ -312,20 +308,19 @@
                     </select>
                 </div>
                 
-                <!-- PHOTO UPLOAD WITH BIG PREVIEW -->
                 <div class="input-group">
                     <label>Profile Avatar</label>
                     <input type="file" id="photo-input" accept="image/*" onchange="previewImage(this)" style="padding: 10px;">
                     <img id="app-preview" src="" alt="preview">
+                    <input type="hidden" name="image_data" id="hidden_photo_data">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Submit Profile</button>
-                <button type="button" class="btn btn-dark" onclick="showSection('members-dash')">Cancel</button>
+                <button type="button" class="btn btn-dark" onclick="cancelForm()">Cancel</button>
             </form>
         </div>
     </div>
 
-    <!-- NORMAL USER DASHBOARD -->
     <div class="dash-container section" id="members-dash">
         <div class="section-header">
             <div>
@@ -336,29 +331,24 @@
         <div class="members-grid" id="approved-list"></div>
     </div>
 
-    <!-- CEO ADMIN DASHBOARD (CLEANED) -->
     <div class="dash-container section" id="owner-dash">
         <div class="section-header">
             <div>
                 <h2>Verified Members</h2>
             </div>
-            <!-- BUTTON TO OPEN GEMINI SLIDER -->
             <button class="btn-sm btn-outline" style="width:max-content; flex:none; padding: 12px 20px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;" onclick="toggleSlider()">
                 ☰ Manage Console 
                 <span class="badge-count" id="header-badge" style="margin-left:5px;">0</span>
             </button>
         </div>
         
-        <!-- TRADERS GRID -->
         <div class="members-grid" id="owner-approved-list"></div>
     </div>
 
-    <!-- POPUP MODAL (WITH FULL PHOTO) -->
     <div class="modal-overlay" id="details-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div class="modal-header">
-                <!-- BIG RECTANGULAR PHOTO IN MODAL -->
                 <img id="modal-photo" src="" alt="Photo" onerror="this.src='https://ui-avatars.com/api/?name=FXG&background=0D1117&color=00C6FF'">
                 <h3 id="modal-name">Name</h3>
                 <div class="badges-wrapper" style="margin-bottom:0; margin-top:10px;">
@@ -375,7 +365,6 @@
         </div>
     </div>
 
-    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -384,12 +373,29 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then(() => { showSection('members-dash', true); renderApproved(); }).catch(console.error);
+            signInWithPopup(auth, provider).then(() => { 
+                localStorage.setItem('active_session', 'user');
+                showSection('members-dash', true); 
+                renderApproved(); 
+            }).catch(console.error);
         });
     </script>
 
-    <!-- CORE LOGIC -->
     <script>
+        // INIT ON LOAD - AUTO LOGIN IF SESSION EXISTS
+        window.onload = function() {
+            let activeSession = localStorage.getItem('active_session');
+            if(activeSession === 'admin') {
+                showSection('owner-dash', true);
+                renderDashboardStats();
+            } else if(activeSession === 'user') {
+                showSection('members-dash', true);
+                renderApproved();
+            } else {
+                showSection('login-section', false);
+            }
+        };
+
         function toggleSlider() {
             document.getElementById('admin-slider').classList.toggle('open');
             document.getElementById('slider-overlay').classList.toggle('open');
@@ -397,24 +403,63 @@
 
         function showSection(id, isLoggedIn = false) {
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            if (isLoggedIn) {
-                document.getElementById('auth-wrapper').style.display = 'none';
-                document.getElementById('main-nav').style.display = 'flex';
-                document.getElementById(id).style.display = 'block';
-            } else {
+            
+            if (id === 'login-section' || id === 'reg-section') {
                 document.getElementById('auth-wrapper').style.display = 'flex';
                 document.getElementById('main-nav').style.display = 'none';
+                document.getElementById(id).style.display = 'block';
+            } else {
+                document.getElementById('auth-wrapper').style.display = 'none';
+                document.getElementById('main-nav').style.display = 'flex';
                 document.getElementById(id).style.display = 'block';
             }
         }
 
-        function logout() { document.getElementById('log-u').value = ''; document.getElementById('log-p').value = ''; showSection('login-section', false); }
-        function handleRegister() { const u = document.getElementById('new-u').value; const p = document.getElementById('new-p').value; localStorage.setItem('user_' + u, p); alert("Registered Successfully!"); showSection('login-section', false); }
+        // FUNCTION TO HANDLE CANCEL FORM
+        function cancelForm() {
+            let activeSession = localStorage.getItem('active_session');
+            if(activeSession === 'admin') {
+                showSection('owner-dash', true);
+                renderDashboardStats();
+            } else if(activeSession === 'user') {
+                showSection('members-dash', true);
+                renderApproved();
+            } else {
+                showSection('login-section', false);
+            }
+        }
+
+        function logout() { 
+            localStorage.removeItem('active_session');
+            document.getElementById('log-u').value = ''; 
+            document.getElementById('log-p').value = ''; 
+            showSection('login-section', false); 
+        }
+
+        function handleRegister() { 
+            const u = document.getElementById('new-u').value; 
+            const p = document.getElementById('new-p').value; 
+            if(u && p) {
+                localStorage.setItem('user_' + u, p); 
+                alert("Registered Successfully!"); 
+                showSection('login-section', false); 
+            } else {
+                alert("Please fill all details.");
+            }
+        }
         
         function handleLogin() {
             const u = document.getElementById('log-u').value; const p = document.getElementById('log-p').value;
-            if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderDashboardStats(); }
-            else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
+            if(u === 'fxg.saurav' && p === 'Xauusd@123') { 
+                localStorage.setItem('active_session', 'admin');
+                showSection('owner-dash', true); 
+                renderDashboardStats(); 
+            }
+            else if(localStorage.getItem('user_' + u) === p) { 
+                localStorage.setItem('active_session', 'user');
+                showSection('members-dash', true); 
+                renderApproved(); 
+            }
             else alert("Invalid Credentials! Please verify uppercase/lowercase.");
         }
 
@@ -424,7 +469,13 @@
             const file = input.files[0];
             if(file) {
                 const reader = new FileReader();
-                reader.onload = function(e) { base64Photo = e.target.result; const prev = document.getElementById('app-preview'); prev.src = base64Photo; prev.style.display = 'block'; }
+                reader.onload = function(e) { 
+                    base64Photo = e.target.result; 
+                    const prev = document.getElementById('app-preview'); 
+                    prev.src = base64Photo; 
+                    prev.style.display = 'block'; 
+                    document.getElementById('hidden_photo_data').value = base64Photo;
+                }
                 reader.readAsDataURL(file);
             }
         }
@@ -432,7 +483,9 @@
         const form = document.getElementById('app-form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = form.querySelector('button[type="submit"]'); btn.innerText = "Processing..."; btn.disabled = true;
+            const btn = form.querySelector('button[type="submit"]'); 
+            btn.innerText = "Processing..."; 
+            btn.disabled = true;
 
             const data = {
                 name: document.getElementById('app-name').value, email: document.getElementById('app-email').value,
@@ -440,12 +493,33 @@
                 prof: document.getElementById('app-prof').value, insta: document.getElementById('app-insta').value,
                 role: document.getElementById('app-role').value, photo: base64Photo
             };
+            
             localStorage.setItem('app_' + data.name, JSON.stringify(data));
             
             fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
             .then(() => {
-                alert("Profile Submitted for Review!"); showSection('members-dash', true); renderApproved(); form.reset();
-                document.getElementById('app-preview').style.display = 'none'; btn.innerText = "Submit Profile"; btn.disabled = false;
+                alert("Profile Submitted for Review! FXG Admin will review shortly."); 
+                
+                let activeSession = localStorage.getItem('active_session');
+                if(activeSession === 'admin') {
+                    showSection('owner-dash', true); renderDashboardStats();
+                } else {
+                    showSection('members-dash', true); renderApproved();
+                }
+                
+                form.reset();
+                document.getElementById('app-preview').style.display = 'none'; 
+                btn.innerText = "Submit Profile"; 
+                btn.disabled = false;
+            }).catch((err) => {
+                alert("Form saved locally, but Web3Forms Error: Please check your Access Key.");
+                let activeSession = localStorage.getItem('active_session');
+                if(activeSession === 'admin') {
+                    showSection('owner-dash', true); renderDashboardStats();
+                } else {
+                    showSection('members-dash', true); renderApproved();
+                }
+                btn.innerText = "Submit Profile"; btn.disabled = false;
             });
         });
 
