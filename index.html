@@ -3,210 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FXG PRO | Elite Trading Hub</title>
+    <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG V11 - PROP FIRM AESTHETIC (ELECTRIC BLUE & OBSIDIAN) */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        /* FXG V13 - ULTRA PREMIUM PROP FIRM THEME */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
-            --primary: #00BFFF; /* Deep Sky Blue matching the Logo X */
-            --primary-hover: #0099CC;
-            --bg-base: #06080C; /* Obsidian Black */
-            --bg-surface: #0D1117; /* Elevated Surface */
-            --bg-surface-hover: #161B22;
-            --border-color: rgba(255, 255, 255, 0.08); 
-            --text-main: #F0F6FC;
-            --text-muted: #8B949E;
-            --danger: #F85149;
-            --warning: #D29922;
-            --shadow-subtle: 0 4px 12px rgba(0,0,0,0.5);
-            --shadow-blue: 0 0 15px rgba(0, 191, 255, 0.2);
+            --accent-1: #0072FF; /* Deep Royal Blue */
+            --accent-2: #00C6FF; /* Electric Cyan */
+            --bg-main: #0B0E14; /* Deep Slate Black */
+            --bg-card: #151A23; /* Elevated Surface */
+            --bg-input: #06080C; /* Darker inputs */
+            --border-color: #2A3241; 
+            --border-highlight: rgba(0, 198, 255, 0.4);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --danger: #FF4D4D;
+            --warning: #FBBF24;
+            --success: #10B981;
         }
+        
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
         
         body { 
-            background-color: var(--bg-base); 
+            background-color: var(--bg-main); 
             color: var(--text-main); 
             min-height: 100vh; 
             display: flex; 
             flex-direction: column;
-            background-image: radial-gradient(circle at top right, rgba(0, 191, 255, 0.05), transparent 40%);
+            background-image: 
+                radial-gradient(circle at top left, rgba(0, 198, 255, 0.04), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 114, 255, 0.04), transparent 40%);
         }
 
-        /* PREMIUM NAVBAR */
+        /* NAVBAR */
         .app-nav {
-            display: none; justify-content: space-between; align-items: center; padding: 16px 40px;
-            background: rgba(6, 8, 12, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color);
+            display: none; justify-content: space-between; align-items: center; padding: 18px 50px;
+            background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color);
             position: sticky; top: 0; z-index: 100;
         }
-        /* LOGO STYLING TO MATCH YOUR UPLOAD */
-        .brand-logo { font-size: 1.6rem; letter-spacing: 2px; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; }
-        .brand-logo span { color: var(--primary); font-weight: 800; text-shadow: 0 0 12px rgba(0, 191, 255, 0.6); margin: 0 2px; font-size: 1.8rem;}
-        .brand-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; letter-spacing: 4px; margin-left: 10px; text-transform: uppercase; border-left: 1px solid var(--border-color); padding-left: 10px;}
+        .nav-logo { display: flex; align-items: center; gap: 12px; }
+        .nav-logo-text { font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: 1px;}
+        .nav-logo-text span { background: linear-gradient(to right, var(--accent-1), var(--accent-2)); -webkit-background-clip: text; color: transparent; }
+        .nav-logo-sub { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; letter-spacing: 4px; text-transform: uppercase; padding-left: 12px; border-left: 1px solid var(--border-color); }
         
-        .nav-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; font-weight: 500; }
-        .nav-btn:hover { background: var(--bg-surface-hover); }
-        .nav-btn.join { border-color: var(--primary); color: var(--text-main); background: var(--primary); color: #000; font-weight: 700; border: none;}
-        .nav-btn.join:hover { background: var(--primary-hover); box-shadow: var(--shadow-blue); }
+        .nav-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; font-weight: 600; }
+        .nav-btn:hover { background: var(--bg-card); border-color: var(--text-muted); }
 
-        /* CONTAINERS */
-        .auth-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .auth-container { 
-            background: var(--bg-surface); padding: 45px 40px; border-radius: 16px; width: 100%; max-width: 420px; 
-            border: 1px solid var(--border-color); box-shadow: var(--shadow-subtle); 
+        /* SPLIT AUTH SCREEN (HUGE LOGO + LOGIN BOX) */
+        .auth-wrapper { flex: 1; display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 40px 10%; gap: 100px; }
+        @media (max-width: 900px) { .auth-wrapper { flex-direction: column; gap: 50px; text-align: center; } }
+        
+        .brand-side { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .hero-logo { font-size: 6rem; font-weight: 900; letter-spacing: 4px; color: #fff; line-height: 1;}
+        .hero-logo span { 
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); 
+            -webkit-background-clip: text; color: transparent; 
+            text-shadow: 0 0 40px rgba(0, 198, 255, 0.3); 
         }
-        .dash-container { display: none; padding: 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .hero-sub { font-size: 1.1rem; letter-spacing: 14px; margin-top: 10px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; margin-right: -14px;}
+
+        .login-side { width: 100%; max-width: 440px; }
+        .auth-container { 
+            background: linear-gradient(145deg, var(--bg-card), #0f131a); 
+            padding: 45px 40px; border-radius: 16px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6); 
+        }
         
         .header-title { text-align: center; margin-bottom: 30px; }
-        .header-title h2 { font-size: 1.6rem; margin-bottom: 6px; font-weight: 700; color: #fff;}
+        .header-title h2 { font-size: 1.5rem; margin-bottom: 6px; font-weight: 700; color: #fff; letter-spacing: -0.5px;}
         .header-title p { color: var(--text-muted); font-size: 0.9rem; }
         
-        /* CLEAN FORMS */
-        .input-group { margin-bottom: 20px; }
-        label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; font-weight: 600;}
+        /* SLEEK INPUTS */
+        .input-group { margin-bottom: 22px; text-align: left; }
+        label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; display: block; font-weight: 600;}
         input, select { 
-            width: 100%; padding: 14px 16px; background: var(--bg-base); 
+            width: 100%; padding: 14px 16px; background: var(--bg-input); 
             border: 1px solid var(--border-color); color: white; border-radius: 8px; 
-            outline: none; transition: 0.2s; font-size: 0.95rem;
+            outline: none; transition: 0.3s; font-size: 0.95rem;
         }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.2); }
+        input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(0, 198, 255, 0.15); }
         .row { display: flex; gap: 15px; }
         
-        /* BUTTONS */
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: 0.2s;}
-        .btn-primary { background: var(--primary); color: #000; box-shadow: var(--shadow-blue); }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        .btn-dark { background: var(--bg-base); border: 1px solid var(--border-color); color: var(--text-main); margin-top: 12px; }
-        .btn-dark:hover { background: var(--bg-surface-hover); }
-        .btn-google { background: #ffffff; color: #000; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* GRADIENT BUTTONS */
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: 0.3s; letter-spacing: 0.5px;}
+        .btn-primary { 
+            background: linear-gradient(to right, var(--accent-1), var(--accent-2)); 
+            color: #fff; 
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.25); 
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 114, 255, 0.4); }
+        .btn-dark { background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); margin-top: 15px; }
+        .btn-dark:hover { background: var(--bg-card); border-color: var(--text-muted);}
+        .btn-google { background: #fff; color: #000; margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-google:hover { background: #f0f0f0; }
+
+        /* MAIN APP LAYOUT */
+        .dash-container { display: none; padding: 50px 40px; max-width: 1300px; margin: 0 auto; width: 100%; }
+        .section-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;}
+        .section-header h2 { font-size: 2rem; font-weight: 700; color: #fff; letter-spacing: -1px; }
+        .section-header p { color: var(--text-muted); font-size: 1rem; margin-top: 6px; }
+
+        /* DASHBOARD METRICS */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .metric-card h4 { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; font-weight: 600;}
+        .metric-card h2 { font-size: 2.2rem; color: #fff; font-weight: 700; }
+        .metric-card .accent-text { background: linear-gradient(to right, var(--accent-1), var(--accent-2)); -webkit-background-clip: text; color: transparent; }
+
+        /* ADMIN SPLIT LAYOUT */
+        .admin-layout { display: grid; grid-template-columns: 380px 1fr; gap: 30px; align-items: start; }
+        @media (max-width: 950px) { .admin-layout { grid-template-columns: 1fr; } }
+
+        /* PANELS */
+        .panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .panel-title { font-size: 1.1rem; color: #fff; font-weight: 700; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;}
         
-        .btn-sm { padding: 8px 12px; font-size: 0.8rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; border: none;}
-        .btn-view { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-color); }
-        .btn-view:hover { background: var(--bg-surface-hover); }
-        .btn-approve { background: var(--primary); color: #000; }
-        .btn-approve:hover { background: var(--primary-hover); }
-        .btn-red { background: rgba(248, 81, 73, 0.1); color: var(--danger); border: 1px solid rgba(248, 81, 73, 0.3); font-size: 0.8rem; padding: 10px; border-radius: 6px; width: 100%; margin-top: 20px;}
-        .btn-red:hover { background: rgba(248, 81, 73, 0.2); }
-
-        /* SECTION HEADERS */
-        .section-header { margin-bottom: 30px; }
-        .section-header h2 { font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
-        .section-header p { color: var(--text-muted); font-size: 0.95rem; }
-
-        /* ==========================================
-           PROP FIRM ADMIN LAYOUT
-           ========================================== */
-        .admin-layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
-        @media (max-width: 1024px) { .admin-layout { grid-template-columns: 1fr; } }
-
-        /* SURFACE BOXES */
-        .surface-box { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-subtle); }
-        .box-title { font-size: 1.1rem; color: #fff; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-
-        /* STATS GRID */
-        .stats-grid { display: flex; flex-direction: column; gap: 15px; }
-        .stat-item { background: var(--bg-base); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .stat-item h4 { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
-        .stat-item h2 { font-size: 2rem; color: var(--text-main); font-weight: 700; }
-        .stat-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
-        .stat-icon.blue { background: rgba(0,191,255,0.1); color: var(--primary); }
-        .stat-icon.orange { background: rgba(210,153,34,0.1); color: var(--warning); }
-
-        /* PENDING CARDS */
-        .admin-list { display: flex; flex-direction: column; gap: 12px; }
-        .admin-card { background: var(--bg-base); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px; transition: 0.2s; border-left: 3px solid var(--warning);}
-        .admin-card:hover { border-color: #333; }
+        /* ADMIN LISTS & CARDS */
+        .admin-list { display: flex; flex-direction: column; gap: 15px; }
+        .admin-card { background: var(--bg-main); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px; border-left: 3px solid var(--warning);}
         .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
-        .admin-details strong { font-size: 1rem; display: block; color: #fff; margin-bottom: 3px;}
+        .admin-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
+        .admin-details strong { font-size: 1.05rem; color: #fff; display: block; margin-bottom: 4px; font-weight: 600;}
         .admin-details span { color: var(--text-muted); font-size: 0.8rem; }
         .admin-actions { display: flex; gap: 10px; width: 100%;}
+        .btn-sm { flex: 1; padding: 10px; font-size: 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; text-align: center; border: none; transition: 0.3s;}
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-input); }
+        .btn-accent { background: rgba(0, 198, 255, 0.1); color: var(--accent-2); border: 1px solid rgba(0, 198, 255, 0.3); }
+        .btn-accent:hover { background: rgba(0, 198, 255, 0.2); }
+        .btn-red-text { background: rgba(255, 77, 77, 0.05); color: var(--danger); border: 1px dashed rgba(255, 77, 77, 0.3); margin-top: 20px; width: 100%;}
+        .btn-red-text:hover { border-color: var(--danger); background: rgba(255, 77, 77, 0.1); }
 
-        /* ACTIVE TEAM ROSTER */
-        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-        .member-card { 
-            background: var(--bg-base); border-radius: 16px; padding: 25px 20px; 
-            border: 1px solid var(--border-color); text-align: center; position: relative; transition: 0.2s;
-        }
-        .member-card:hover { border-color: rgba(0, 191, 255, 0.4); box-shadow: 0 8px 25px rgba(0,0,0,0.4); transform: translateY(-3px);}
+        /* UNIFIED MEMBERS GRID */
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .member-card { background: var(--bg-main); border-radius: 14px; padding: 30px 20px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; }
+        .member-card:hover { border-color: var(--border-highlight); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .member-avatar-wrap { position: relative; width: 85px; height: 85px; margin: 0 auto 18px; }
+        .member-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg-card); }
+        .member-card h3 { font-size: 1.25rem; margin-bottom: 15px; color: #fff; font-weight: 700;}
         
-        .member-avatar-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 16px; }
-        .member-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
-        
-        .member-card h3 { font-size: 1.15rem; margin-bottom: 10px; color: #fff; font-weight: 600;}
-        
-        /* PROP FIRM BADGES */
-        .badges-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-        .pill { padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .pill.role { background: rgba(0,191,255,0.1); color: var(--primary); border: 1px solid rgba(0,191,255,0.2); }
-        .pill.status { background: rgba(210,153,34,0.1); color: var(--warning); border: 1px solid rgba(210,153,34,0.2); }
+        /* CLEAN PREMIUM PILLS */
+        .badges-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+        .pill { padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid; }
+        .pill.role { color: #fff; border-color: var(--border-color); background: var(--bg-card);}
+        .pill.status-funded { color: var(--accent-2); border-color: rgba(0, 198, 255, 0.3); background: rgba(0, 198, 255, 0.05); }
+        .pill.status-eval { color: var(--warning); border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.05); }
 
-        .member-footer { display: flex; justify-content: center; gap: 15px; color: var(--text-muted); font-size: 0.8rem; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
+        .member-footer { display: flex; justify-content: center; gap: 18px; color: var(--text-muted); font-size: 0.8rem; background: var(--bg-input); padding: 12px; border-radius: 8px;}
+        .member-footer span { display: flex; align-items: center; gap: 6px; font-weight: 500;}
 
         /* MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: var(--bg-surface); width: 100%; max-width: 420px; border-radius: 16px; border: 1px solid var(--border-color); padding: 30px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--bg-card); width: 100%; max-width: 420px; border-radius: 16px; border: 1px solid var(--border-color); padding: 35px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.8);}
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 26px; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
         .close-btn:hover { color: #fff; }
-        .modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
-        .modal-header img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); margin-bottom: 15px; box-shadow: var(--shadow-blue);}
-        .modal-header h3 { font-size: 1.4rem; color: #fff; margin-bottom: 8px;}
-        .modal-body .detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+        .modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 25px; }
+        .modal-header img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-2); margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 198, 255, 0.2);}
+        .modal-header h3 { font-size: 1.4rem; color: #fff; margin-bottom: 8px; font-weight: 700;}
+        .modal-body .detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
         .modal-body .detail-row:last-child { border: none; }
         .modal-body .detail-label { color: var(--text-muted); font-size: 0.85rem; }
-        .modal-body .detail-value { font-weight: 500; font-size: 0.9rem; color: #fff;}
+        .modal-body .detail-value { font-weight: 600; font-size: 0.95rem; color: #fff;}
 
-        #app-preview { width: 80px; height: 80px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; border: 2px solid var(--primary); }
+        #app-preview { width: 80px; height: 80px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; border: 1px solid var(--border-color); }
         .section { display: none; }
-        .empty-state { text-align: center; color: var(--text-muted); padding: 35px; font-size: 0.85rem; background: var(--bg-base); border-radius: 12px; border: 1px dashed var(--border-color);}
+        .empty-state { text-align: center; color: var(--text-muted); padding: 40px; font-size: 0.9rem; background: var(--bg-main); border-radius: 10px; border: 1px dashed var(--border-color);}
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR WITH LOGO RECREATION -->
+    <!-- NAVBAR -->
     <nav class="app-nav" id="main-nav">
-        <div class="brand-logo">F<span>X</span>G <div class="brand-sub">Pro</div></div>
+        <div class="nav-logo">
+            <div class="nav-logo-text">F<span>X</span>G</div>
+            <div class="nav-logo-sub">Pro</div>
+        </div>
         <div>
-            <button class="nav-btn join" onclick="showSection('form-section', true)" id="nav-join-btn">Join Team</button>
-            <button class="nav-btn" onclick="logout()" style="margin-left: 10px;">Logout</button>
+            <button class="nav-btn" onclick="logout()">Secure Logout</button>
         </div>
     </nav>
 
-    <!-- AUTH WRAPPER -->
+    <!-- AUTH WRAPPER (SPLIT SCREEN) -->
     <div class="auth-wrapper" id="auth-wrapper">
-        <!-- Brand identity above login -->
-        <div style="text-align: center; width: 100%; max-width: 420px; margin-bottom: 20px;">
-            <div class="brand-logo" style="justify-content: center; font-size: 2.5rem;">F<span>X</span>G</div>
-            <div style="color:var(--text-muted); letter-spacing:8px; font-size:0.75rem; margin-top:10px; margin-left:8px;">S A U R A V</div>
+        
+        <!-- BRAND SIDE (HUGE LOGO) -->
+        <div class="brand-side">
+            <div class="hero-logo">F<span>X</span>G</div>
+            <div class="hero-sub">S A U R A V</div>
         </div>
 
-        <div class="auth-container section" id="login-section" style="display: block;">
-            <div class="header-title"><h2>Client Portal</h2><p>Access your trading dashboard</p></div>
-            <div class="input-group"><label>Username</label><input type="text" id="log-u" placeholder="Enter username"></div>
-            <div class="input-group"><label>Password</label><input type="password" id="log-p" placeholder="Enter password"></div>
-            <button class="btn btn-primary" onclick="handleLogin()">Access Dashboard</button>
-            <button class="btn btn-dark" onclick="showSection('reg-section')">Create Account</button>
-            <div style="text-align:center; margin: 20px 0; color: var(--text-muted); font-size: 11px; letter-spacing: 1px;">OR</div>
-            <button type="button" class="btn btn-google" id="google-login-btn">
-                <img src="https://developers.google.com/identity/images/g-logo.png" width="18" alt="G"> Sign in with Google
-            </button>
-        </div>
-        <div class="auth-container section" id="reg-section">
-            <div class="header-title"><h2>Registration</h2><p>Join the elite network</p></div>
-            <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
-            <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
-            <button class="btn btn-primary" onclick="handleRegister()">Register Account</button>
-            <button class="btn btn-dark" onclick="showSection('login-section')">Return to Login</button>
+        <!-- LOGIN PANEL -->
+        <div class="login-side">
+            <div class="auth-container section" id="login-section" style="display: block;">
+                <div class="header-title"><h2>Client Portal</h2><p>Access your trading account</p></div>
+                <!-- Added placeholder hint for Admin -->
+                <div class="input-group"><label>Username</label><input type="text" id="log-u" placeholder="e.g. fxg.saurav"></div>
+                <div class="input-group"><label>Password</label><input type="password" id="log-p" placeholder="Enter password"></div>
+                <button class="btn btn-primary" onclick="handleLogin()">Access Dashboard</button>
+                <button class="btn btn-dark" onclick="showSection('reg-section')">Apply for Account</button>
+                <div style="text-align:center; margin: 25px 0; color: var(--text-muted); font-size: 11px; letter-spacing: 1px;">OR</div>
+                <button type="button" class="btn btn-google" id="google-login-btn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" width="18" alt="G"> Sign in with Google
+                </button>
+            </div>
+
+            <!-- REGISTRATION PANEL -->
+            <div class="auth-container section" id="reg-section">
+                <div class="header-title"><h2>Account Setup</h2><p>Register your portal credentials</p></div>
+                <div class="input-group"><label>Username</label><input type="text" id="new-u"></div>
+                <div class="input-group"><label>Password</label><input type="password" id="new-p"></div>
+                <button class="btn btn-primary" onclick="handleRegister()">Register Account</button>
+                <button class="btn btn-dark" onclick="showSection('login-section')">Back to Login</button>
+            </div>
         </div>
     </div>
 
     <!-- APPLICATION FORM -->
     <div class="dash-container section" id="form-section">
-        <div class="auth-container" style="margin: 0 auto; max-width: 600px;">
-            <div class="header-title"><h2>Team Application</h2><p>Submit your evaluation profile</p></div>
+        <div class="auth-container" style="margin: 0 auto; max-width: 550px;">
+            <div class="header-title"><h2>Trader Profile</h2><p>Submit details for review</p></div>
             <form id="app-form">
                 <input type="hidden" name="access_key" value="50b484ee-0759-4ef3-995f-e000c9c99513">
-                
                 <div class="input-group"><label>Full Name</label><input type="text" name="name" id="app-name" required></div>
                 <div class="input-group"><label>Email Address</label><input type="email" name="email" id="app-email" required></div>
                 
@@ -218,83 +237,98 @@
                 <div class="input-group"><label>Instagram ID</label><input type="text" name="insta" id="app-insta" required placeholder="@username"></div>
                 
                 <div class="input-group">
-                    <label>Trading Status</label>
+                    <label>Current Trading Status</label>
                     <select name="profitable" id="app-prof">
-                        <option value="Funded / Profitable">Funded / Profitable</option>
-                        <option value="Break-Even">Break-Even</option>
+                        <option value="Funded Trader">Funded Trader / Profitable</option>
                         <option value="Evaluation Phase">Evaluation Phase</option>
+                        <option value="Learning Phase">Learning Phase</option>
                     </select>
                 </div>
 
                 <div class="input-group">
                     <label>Target Role</label>
                     <select name="role" id="app-role">
+                        <option value="Elite Member">Elite Member</option>
+                        <option value="Normal Member">Normal Member</option>
                         <option value="Owner">Owner</option>
                         <option value="CEO">CEO</option>
-                        <option value="Elite Member">Elite Member</option>
                     </select>
                 </div>
                 
                 <div class="input-group">
-                    <label>Profile Photo</label>
+                    <label>Profile Avatar</label>
                     <input type="file" id="photo-input" accept="image/*" onchange="previewImage(this)" style="padding: 10px;">
                     <img id="app-preview" src="" alt="preview">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Submit Profile</button>
+                <button type="button" class="btn btn-dark" onclick="showSection('members-dash')">Cancel</button>
             </form>
-            <button class="btn btn-dark" onclick="showSection('members-dash', true)">Cancel</button>
         </div>
     </div>
 
-    <!-- MEMBERS VIEW (NORMAL USER DASHBOARD) -->
+    <!-- NORMAL USER DASHBOARD -->
     <div class="dash-container section" id="members-dash">
         <div class="section-header">
-            <h2>Active Roster</h2>
-            <p>Verified independent traders connected to the FXG network.</p>
+            <div>
+                <h2>Dashboard Overview</h2>
+                <p>Welcome to the FXG Pro Trading Network.</p>
+            </div>
+            <button class="btn-sm btn-primary" style="width:auto; padding: 12px 24px; font-size: 0.9rem;" onclick="showSection('form-section', true)">Submit KYC Profile</button>
         </div>
-        <div class="members-grid" id="approved-list"></div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h4>Account Status</h4>
+                <h2 class="accent-text">Active</h2>
+            </div>
+            <div class="metric-card">
+                <h4>Trading Phase</h4>
+                <h2>Evaluation</h2>
+            </div>
+            <div class="metric-card">
+                <h4>Network Traders</h4>
+                <h2 id="user-total-traders">0</h2>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Official FXG Team</div>
+            <div class="members-grid" id="approved-list"></div>
+        </div>
     </div>
 
-    <!-- OWNER DASHBOARD (CEO COMMAND CENTER) -->
+    <!-- CEO ADMIN DASHBOARD -->
     <div class="dash-container section" id="owner-dash">
         <div class="section-header">
-            <h2>Command Center</h2>
-            <p>Manage evaluations and active network members.</p>
+            <div>
+                <h2>Admin Console</h2>
+                <p>Manage network evaluations and verified traders.</p>
+            </div>
         </div>
         
-        <!-- PROP FIRM 2-COLUMN LAYOUT -->
         <div class="admin-layout">
             
             <!-- LEFT COLUMN -->
-            <div class="left-sidebar">
+            <div class="left-sidebar" style="display:flex; flex-direction:column; gap:30px;">
                 
-                <!-- Box 1: Metrics -->
-                <div class="surface-box" style="margin-bottom: 24px;">
-                    <div class="box-title">Network Metrics</div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div>
-                                <h4>Active Traders</h4>
-                                <h2 id="stat-active">0</h2>
-                            </div>
-                            <div class="stat-icon blue">👥</div>
+                <div class="panel">
+                    <div class="panel-title">Network Metrics</div>
+                    <div style="display:flex; gap:15px; margin-bottom:10px;">
+                        <div style="flex:1; background:var(--bg-main); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                            <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; margin-bottom:8px; font-weight:600;">Active</div>
+                            <div style="font-size:1.8rem; color:#fff; font-weight:700;" id="stat-active">0</div>
                         </div>
-                        <div class="stat-item">
-                            <div>
-                                <h4>Pending Evaluations</h4>
-                                <h2 id="stat-pending">0</h2>
-                            </div>
-                            <div class="stat-icon orange">⏳</div>
+                        <div style="flex:1; background:var(--bg-main); padding:20px; border-radius:10px; border:1px solid var(--border-color);">
+                            <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; margin-bottom:8px; font-weight:600;">Pending</div>
+                            <div style="font-size:1.8rem; color:var(--warning); font-weight:700;" id="stat-pending">0</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Box 2: Pending Applications -->
-                <div class="surface-box">
-                    <div class="box-title">
+                <div class="panel">
+                    <div class="panel-title">
                         Pending Reviews
-                        <span style="background:var(--warning); color:#000; padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700;" id="pending-badge">0</span>
                     </div>
                     <div class="admin-list" id="pending-list">
                         <!-- Pending cards inject here -->
@@ -304,12 +338,10 @@
             </div>
 
             <!-- RIGHT COLUMN -->
-            <div class="right-content">
-                <div class="surface-box" style="min-height: 100%;">
-                    <div class="box-title">Trader Roster Management</div>
-                    <div class="members-grid" id="owner-approved-list">
-                        <!-- Active members inject here -->
-                    </div>
+            <div class="panel" style="min-height: 100%;">
+                <div class="panel-title">Verified Traders Roster</div>
+                <div class="members-grid" id="owner-approved-list">
+                    <!-- Active members inject here -->
                 </div>
             </div>
 
@@ -323,7 +355,7 @@
             <div class="modal-header">
                 <img id="modal-photo" src="" alt="Photo">
                 <h3 id="modal-name">Name</h3>
-                <div class="badges-wrapper" style="margin-bottom:0; margin-top:8px;">
+                <div class="badges-wrapper" style="margin-bottom:0; margin-top:10px;">
                     <span id="modal-role" class="pill role">Role</span>
                 </div>
             </div>
@@ -358,8 +390,6 @@
                 document.getElementById('auth-wrapper').style.display = 'none';
                 document.getElementById('main-nav').style.display = 'flex';
                 document.getElementById(id).style.display = 'block';
-                const joinBtn = document.getElementById('nav-join-btn');
-                if(id === 'owner-dash') { joinBtn.style.display = 'none'; } else { joinBtn.style.display = 'inline-block'; }
             } else {
                 document.getElementById('auth-wrapper').style.display = 'flex';
                 document.getElementById('main-nav').style.display = 'none';
@@ -372,12 +402,13 @@
         
         function handleLogin() {
             const u = document.getElementById('log-u').value; const p = document.getElementById('log-p').value;
+            // IMPORTANT: Password requires capital 'X'
             if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderDashboardStats(); }
             else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
-            else alert("Invalid Credentials!");
+            else alert("Invalid Credentials! Please verify uppercase/lowercase.");
         }
 
-        let base64Photo = "https://via.placeholder.com/150/06080C/00BFFF?text=FXG"; 
+        let base64Photo = "https://via.placeholder.com/150/151A23/0072FF?text=FXG"; 
         function previewImage(input) {
             const file = input.files[0];
             if(file) {
@@ -402,7 +433,7 @@
             
             fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) })
             .then(() => {
-                alert("Evaluation Profile Submitted!"); showSection('members-dash', true); renderApproved(); form.reset();
+                alert("Profile Submitted for Review!"); showSection('members-dash', true); renderApproved(); form.reset();
                 document.getElementById('app-preview').style.display = 'none'; btn.innerText = "Submit Profile"; btn.disabled = false;
             });
         });
@@ -430,15 +461,14 @@
                             </div>
                         </div> 
                         <div class="admin-actions">
-                            <button onclick="openModal('${key}')" class="btn-sm btn-view">Review</button>
-                            <button onclick="approve('${key}')" class="btn-sm btn-approve">Accept</button>
+                            <button onclick="openModal('${key}')" class="btn-sm btn-outline">Review</button>
+                            <button onclick="approve('${key}')" class="btn-sm btn-accent">Accept</button>
                         </div>
                     </div>`;
                 }
             }
-            document.getElementById('stat-pending').innerText = count;
-            document.getElementById('pending-badge').innerText = count;
-            if(count === 0) list.innerHTML = "<div class='empty-state'>No pending evaluations. Queue is clear!</div>";
+            if(document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText = count;
+            if(count === 0) list.innerHTML = "<div class='empty-state'>No pending evaluations.</div>";
         }
 
         function approve(key) { 
@@ -465,8 +495,9 @@
                 if(key.startsWith('member_')) {
                     count++;
                     let d = JSON.parse(localStorage.getItem(key));
-                    let profStatus = d.prof ? d.prof : "Funded / Profitable"; 
-                    
+                    let profStatus = d.prof ? d.prof : "Funded Trader"; 
+                    let statusClass = profStatus.includes("Funded") || profStatus.includes("Profitable") ? "status-funded" : "status-eval";
+
                     let cardBase = `
                         <div class="member-avatar-wrap">
                             <img src="${d.photo}" class="member-avatar">
@@ -474,21 +505,25 @@
                         <h3>${d.name}</h3>
                         <div class="badges-wrapper">
                             <span class="pill role">${d.role}</span>
-                            <span class="pill status">${profStatus}</span>
+                            <span class="pill ${statusClass}">${profStatus}</span>
                         </div>
-                        <div class="member-footer"><span>📈 ${d.exp} Yrs</span><span>📱 @${d.insta}</span></div>
+                        <div class="member-footer">
+                            <span>🏆 ${d.exp} Yrs</span>
+                            <span>📱 @${d.insta}</span>
+                        </div>
                     `;
 
                     html1 += `<div class="member-card">${cardBase}</div>`;
                     html2 += `
                         <div class="member-card">
                             ${cardBase}
-                            <button onclick="kickMember('${key}')" class="btn-red">Revoke Access</button>
+                            <button onclick="kickMember('${key}')" class="btn-sm btn-red-text">Revoke Access</button>
                         </div>`;
                 }
             }
             
             if(document.getElementById('stat-active')) document.getElementById('stat-active').innerText = count;
+            if(document.getElementById('user-total-traders')) document.getElementById('user-total-traders').innerText = count;
             
             if(count === 0) {
                 let msg = "<div class='empty-state' style='grid-column:1/-1;'>No active traders in the network yet.</div>";
