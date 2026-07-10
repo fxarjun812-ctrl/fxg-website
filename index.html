@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG FINAL V21 - AESTHETIC POLISH + EMPTY STATE FIX */
+        /* FXG FINAL V22 - FULL PHOTO CARDS & CLEAN HEADERS */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
@@ -85,8 +85,6 @@
         /* MAIN APP LAYOUT */
         .dash-container { display: none; padding: 50px 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .section-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;}
-        
-        /* UPDATED SECTION HEADER GRADIENT */
         .section-header h2 { 
             font-size: 2.4rem; 
             font-weight: 800; 
@@ -96,7 +94,6 @@
             -webkit-background-clip: text;
             color: transparent;
         }
-        .section-header p { color: var(--text-muted); font-size: 1.05rem; }
 
         /* ==========================================
            GEMINI SLIDER (OFFCANVAS SIDEBAR)
@@ -133,7 +130,7 @@
         .admin-list { display: flex; flex-direction: column; gap: 15px; }
         .admin-card { background: var(--bg-main); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px; border-left: 3px solid var(--warning);}
         .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
+        .admin-info img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-color); }
         .admin-details strong { font-size: 1.05rem; color: #fff; display: block; margin-bottom: 4px; font-weight: 600;}
         .admin-details span { color: var(--text-muted); font-size: 0.8rem; }
         .admin-actions { display: flex; gap: 10px; width: 100%;}
@@ -144,46 +141,55 @@
         .btn-accent { background: rgba(0, 198, 255, 0.1); color: var(--accent-2); border: 1px solid rgba(0, 198, 255, 0.3); }
         .btn-accent:hover { background: rgba(0, 198, 255, 0.2); }
 
-        /* GRID (MAIN AREA) */
-        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .member-card { background: var(--bg-card); border-radius: 14px; padding: 35px 20px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative;}
-        .member-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .member-avatar-wrap { position: relative; width: 90px; height: 90px; margin: 0 auto 20px; }
-        .member-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg-main); background-color: var(--bg-main); }
-        .member-card h3 { font-size: 1.3rem; margin-bottom: 15px; color: #fff; font-weight: 700;}
+        /* ==========================================
+           NEW GRID: FULL PHOTO CARDS
+           ========================================== */
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .member-card { background: var(--bg-card); border-radius: 16px; padding: 15px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; overflow: hidden;}
+        .member-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        /* BADI PHOTO WALA SECTION */
+        .member-avatar-wrap { position: relative; width: 100%; height: 220px; margin: 0 auto 15px; border-radius: 12px; overflow: hidden; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.02);}
+        .member-avatar { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: 0.3s;}
+        .member-card:hover .member-avatar { transform: scale(1.03); }
+
+        /* INTRO BELOW PHOTO */
+        .member-card h3 { font-size: 1.35rem; margin-bottom: 12px; color: #fff; font-weight: 700; letter-spacing: 0.5px;}
         
         /* PILLS */
-        .badges-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
-        .pill { padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid; }
+        .badges-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .pill { padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid; }
         .pill.role { color: #fff; border-color: var(--border-color); background: var(--bg-input);}
         .pill.status-funded { color: var(--accent-2); border-color: rgba(0, 198, 255, 0.3); background: rgba(0, 198, 255, 0.05); }
         .pill.status-eval { color: var(--warning); border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.05); }
         .pill.status-danger { color: var(--danger); border-color: rgba(255, 77, 77, 0.3); background: rgba(255, 77, 77, 0.05); }
 
-        .member-footer { display: flex; justify-content: center; gap: 18px; color: var(--text-muted); font-size: 0.8rem; background: var(--bg-input); padding: 12px; border-radius: 8px;}
+        .member-footer { display: flex; justify-content: center; gap: 18px; color: var(--text-muted); font-size: 0.85rem; background: var(--bg-input); padding: 12px; border-radius: 10px;}
         .member-footer span { display: flex; align-items: center; gap: 6px; font-weight: 500;}
 
-        .btn-red-text { background: rgba(255, 77, 77, 0.05); color: var(--danger); border: 1px dashed rgba(255, 77, 77, 0.3); margin-top: 25px; width: 100%;}
+        .btn-red-text { background: rgba(255, 77, 77, 0.05); color: var(--danger); border: 1px dashed rgba(255, 77, 77, 0.3); margin-top: 15px; width: 100%;}
         .btn-red-text:hover { border-color: var(--danger); background: rgba(255, 77, 77, 0.1); }
 
         /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: var(--bg-card); width: 100%; max-width: 420px; border-radius: 16px; border: 1px solid var(--border-color); padding: 35px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.8);}
-        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 26px; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 30px; color: var(--text-muted); cursor: pointer; transition: 0.3s; z-index: 10;}
         .close-btn:hover { color: #fff; }
-        .modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 25px; }
-        .modal-header img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-2); margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 198, 255, 0.2); background-color: var(--bg-main);}
-        .modal-header h3 { font-size: 1.4rem; color: #fff; margin-bottom: 8px; font-weight: 700;}
+        
+        .modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .modal-header img { width: 100%; height: 220px; border-radius: 12px; object-fit: cover; object-position: top center; border: 1px solid var(--border-color); margin-bottom: 20px; background-color: var(--bg-input);}
+        .modal-header h3 { font-size: 1.5rem; color: #fff; margin-bottom: 8px; font-weight: 700;}
+        
         .modal-body .detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
         .modal-body .detail-row:last-child { border: none; }
         .modal-body .detail-label { color: var(--text-muted); font-size: 0.85rem; }
         .modal-body .detail-value { font-weight: 600; font-size: 0.95rem; color: #fff;}
 
-        /* FIXED AUTO-ADJUST PHOTO STYLING */
-        #app-preview { width: 85px; height: 85px; border-radius: 50%; margin-top: 15px; display: none; object-fit: cover; object-position: center; border: 2px solid var(--accent-2); box-shadow: 0 0 10px rgba(0, 198, 255, 0.2); }
+        /* LARGE PHOTO PREVIEW FOR FORM */
+        #app-preview { width: 100%; height: 200px; border-radius: 12px; margin-top: 15px; display: none; object-fit: cover; object-position: top center; border: 1px solid var(--accent-2); box-shadow: 0 0 15px rgba(0, 198, 255, 0.15); background: var(--bg-main);}
         .section { display: none; }
         
-        /* NEW PREMIUM EMPTY STATE */
+        /* PREMIUM EMPTY STATE */
         .empty-state { 
             text-align: center; 
             padding: 60px 40px; 
@@ -198,8 +204,6 @@
         .empty-state h3 { color: #fff; font-size: 1.3rem; margin-bottom: 8px; font-weight: 700; }
         .empty-state p { color: var(--text-muted); font-size: 0.95rem; }
         
-        /* ADMIN SLIDER EMPTY STATE */
-        .slider-empty { text-align: center; color: var(--text-muted); padding: 40px; font-size: 0.9rem; background: transparent; border-radius: 10px; border: 1px dashed var(--border-color); width:100%; }
     </style>
 </head>
 <body>
@@ -308,6 +312,7 @@
                     </select>
                 </div>
                 
+                <!-- PHOTO UPLOAD WITH BIG PREVIEW -->
                 <div class="input-group">
                     <label>Profile Avatar</label>
                     <input type="file" id="photo-input" accept="image/*" onchange="previewImage(this)" style="padding: 10px;">
@@ -320,14 +325,12 @@
         </div>
     </div>
 
-    <!-- NORMAL USER DASHBOARD (CLEANED) -->
+    <!-- NORMAL USER DASHBOARD -->
     <div class="dash-container section" id="members-dash">
         <div class="section-header">
             <div>
-                <h2>Pro Team Roster</h2>
-                <p>Official Trading Roster of FXG</p>
+                <h2>Verified Members</h2>
             </div>
-            <!-- BUTTON TEXT UPDATED -->
             <button class="btn btn-primary" style="width:max-content; flex:none; padding: 12px 24px; font-size: 0.95rem; font-weight:700;" onclick="showSection('form-section', true)">+ Join FXG Team</button>
         </div>
         <div class="members-grid" id="approved-list"></div>
@@ -337,9 +340,9 @@
     <div class="dash-container section" id="owner-dash">
         <div class="section-header">
             <div>
-                <h2>Verified Traders Roster</h2>
-                <p>Manage your elite trading network.</p>
+                <h2>Verified Members</h2>
             </div>
+            <!-- BUTTON TO OPEN GEMINI SLIDER -->
             <button class="btn-sm btn-outline" style="width:max-content; flex:none; padding: 12px 20px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;" onclick="toggleSlider()">
                 ☰ Manage Console 
                 <span class="badge-count" id="header-badge" style="margin-left:5px;">0</span>
@@ -350,11 +353,12 @@
         <div class="members-grid" id="owner-approved-list"></div>
     </div>
 
-    <!-- POPUP MODAL -->
+    <!-- POPUP MODAL (WITH FULL PHOTO) -->
     <div class="modal-overlay" id="details-modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div class="modal-header">
+                <!-- BIG RECTANGULAR PHOTO IN MODAL -->
                 <img id="modal-photo" src="" alt="Photo" onerror="this.src='https://ui-avatars.com/api/?name=FXG&background=0D1117&color=00C6FF'">
                 <h3 id="modal-name">Name</h3>
                 <div class="badges-wrapper" style="margin-bottom:0; margin-top:10px;">
@@ -414,7 +418,7 @@
             else alert("Invalid Credentials! Please verify uppercase/lowercase.");
         }
 
-        let base64Photo = "https://ui-avatars.com/api/?name=FXG&background=0D1117&color=00C6FF&size=150"; 
+        let base64Photo = "https://ui-avatars.com/api/?name=FXG&background=0D1117&color=00C6FF&size=200"; 
         
         function previewImage(input) {
             const file = input.files[0];
@@ -492,7 +496,7 @@
                 if(count > 0) headerBadge.classList.add('show'); else headerBadge.classList.remove('show');
             }
             
-            if(count === 0) list.innerHTML = "<div class='slider-empty'>Queue is clear!</div>";
+            if(count === 0) list.innerHTML = "<div class='empty-state' style='background:transparent; border:none; padding:10px; box-shadow:none; color:var(--text-muted);'>Queue is clear!</div>";
         }
 
         function approve(key) { 
@@ -522,7 +526,7 @@
                     let profStatus = d.prof ? d.prof : "Profitable"; 
                     
                     let statusClass = "status-eval"; 
-                    if(profStatus === "Profitable") statusClass = "status-funded"; 
+                    if(profStatus === "Profitable" || profStatus.includes("Funded")) statusClass = "status-funded"; 
                     else if(profStatus === "Losing Phase") statusClass = "status-danger"; 
                     else if(profStatus === "Break Even Phase") statusClass = "status-eval"; 
                     else statusClass = "status-eval"; 
@@ -530,6 +534,7 @@
                     let encodedName = encodeURIComponent(d.name);
                     let safeImage = d.photo || `https://ui-avatars.com/api/?name=${encodedName}&background=0D1117&color=00C6FF`;
 
+                    // BIG FULL PHOTO CARD BASE
                     let cardBase = `
                         <div class="member-avatar-wrap">
                             <img src="${safeImage}" class="member-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodedName}&background=0D1117&color=00C6FF'">
@@ -556,7 +561,6 @@
             
             if(document.getElementById('stat-active')) document.getElementById('stat-active').innerText = count;
             
-            // NEW PREMIUM EMPTY STATE
             let emptyMsg = `
                 <div class="empty-state">
                     <div class="empty-state-icon">🌌</div>
