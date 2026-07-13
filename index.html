@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXG PRO | Elite Trading Network</title>
     <style>
-        /* FXG FINAL V23 - FULL CODE WITH REJECT BUTTON & FULL PHOTO FIX */
+        /* FXG FINAL V24 - FULL CODE WITH REJECT BUTTON, FULL PHOTO FIX & SESSION MEMORY */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
         :root { 
@@ -385,8 +385,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        
         document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then(() => { showSection('members-dash', true); renderApproved(); }).catch(console.error);
+            signInWithPopup(auth, provider).then(() => { 
+                localStorage.setItem('active_session', 'member'); // Memory saved for Google login
+                showSection('members-dash', true); 
+                renderApproved(); 
+            }).catch(console.error);
         });
     </script>
 
@@ -410,13 +415,29 @@
             }
         }
 
-        function logout() { document.getElementById('log-u').value = ''; document.getElementById('log-p').value = ''; showSection('login-section', false); }
+        // Updated Logout Function
+        function logout() { 
+            localStorage.removeItem('active_session'); // Clear session
+            document.getElementById('log-u').value = ''; 
+            document.getElementById('log-p').value = ''; 
+            location.reload(); // Reload to reset the state
+        }
+        
         function handleRegister() { const u = document.getElementById('new-u').value; const p = document.getElementById('new-p').value; localStorage.setItem('user_' + u, p); alert("Registered Successfully!"); showSection('login-section', false); }
         
+        // Updated Login Function with Memory Save
         function handleLogin() {
             const u = document.getElementById('log-u').value; const p = document.getElementById('log-p').value;
-            if(u === 'fxg.saurav' && p === 'Xauusd@123') { showSection('owner-dash', true); renderDashboardStats(); }
-            else if(localStorage.getItem('user_' + u) === p) { showSection('members-dash', true); renderApproved(); }
+            if(u === 'fxg.saurav' && p === 'Xauusd@123') { 
+                localStorage.setItem('active_session', 'admin'); // Save Admin Session
+                showSection('owner-dash', true); 
+                renderDashboardStats(); 
+            }
+            else if(localStorage.getItem('user_' + u) === p) { 
+                localStorage.setItem('active_session', 'member'); // Save Member Session
+                showSection('members-dash', true); 
+                renderApproved(); 
+            }
             else alert("Invalid Credentials! Please verify uppercase/lowercase.");
         }
 
@@ -602,6 +623,18 @@
             document.getElementById('details-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('details-modal').style.display = 'none'; }
+        
+        // This checks memory when the page is loaded/reloaded
+        window.onload = function() {
+            const session = localStorage.getItem('active_session');
+            if (session === 'admin') {
+                showSection('owner-dash', true);
+                renderDashboardStats();
+            } else if (session === 'member') {
+                showSection('members-dash', true);
+                renderApproved();
+            }
+        };
     </script>
 </body>
 </html>
